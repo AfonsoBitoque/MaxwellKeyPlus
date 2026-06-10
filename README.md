@@ -90,11 +90,15 @@ MaxwellKey/
 │
 ├── docs/
 │   ├── SimulationGuide.md          # COMSOL/OpenEMS guide (Portuguese)
+│   ├── TestbedArchitecture.md      # Experimental testbed architecture
+│   ├── ExperimentalGuide.md      # VNA/SDR measurement protocol
 │   ├── AuditoriaFinal.md           # Internal audit reports
 │   └── ValidacaoFinal.md           # Validation checklist
 │
 ├── scripts/
-│   └── simulate_circuit.py         # Python fallback circuit simulator
+│   ├── simulate_circuit.py         # Python fallback circuit simulator
+│   ├── vna_capture.py              # VNA/SDR S-parameter capture
+│   └── sparams_to_params.py        # Convert S-parameters → MaxwellKey params
 │
 ├── paper/
 │   └── MaxwellKey_Paper.md         # Full conference paper
@@ -135,7 +139,9 @@ MaxwellKey/
 
 ---
 
-## Experimental Workflow (for David)
+## Experimental Workflows
+
+### Workflow A: Simulation (Fallback)
 
 ```
 ┌──────────────┐     ┌────────────────────┐     ┌─────────────────┐
@@ -156,6 +162,29 @@ MaxwellKey/
 2. **Extract** parameters from the S/Y matrix at 100 MHz.
 3. **Fill** `scripts/params.json` or directly edit `TemplateRealParams.lean`.
 4. **Verify** with `lake build` — Lean checks `|M_mutual| < |M_self|/2`, `f² ≥ min_f_sq`, and all positivity constraints.
+
+### Workflow B: Real Testbed (VNA / SDR)
+
+```
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌─────────────────┐
+│   PCB Real   │────▶│  VNA / SDR   │────▶│  scripts/    │────▶│ TemplateReal-   │
+│  (2 pistas)  │     │  S-parameters│     │  sparams_to_ │     │ Params.lean     │
+└──────────────┘     └──────────────┘     │  params.py   │     └─────────────────┘
+                                           └──────────────┘              │
+                                                                          │
+                                                                          ▼
+                                                                   ┌─────────────────┐
+                                                                   │  Lean verifies  │
+                                                                   │  all hypotheses │
+                                                                   └─────────────────┘
+```
+
+1. **Build** the test PCB (see [`docs/TestbedArchitecture.md`](docs/TestbedArchitecture.md)).
+2. **Measure** S-parameters with a VNA (NanoVNA, Keysight) or SDR (see [`docs/ExperimentalGuide.md`](docs/ExperimentalGuide.md)).
+3. **Process** with `scripts/vna_capture.py` → `scripts/sparams_to_params.py` → `scripts/params.json`.
+4. **Verify** with `lake build` — Lean checks the same hypotheses on **real measured data**.
+
+**Key advantage:** Workflow B validates the formal model against empirical physics, closing the simulation-reality gap.
 
 ---
 

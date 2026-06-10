@@ -179,17 +179,25 @@ noncomputable def compute_eve_distance_factor (M_self M_mutual distance_ratio : 
     NOTA: Lean 4 nao suporta leitura de ficheiros JSON diretamente
     no modo de verificacao de provas. O workflow e:
 
+    Workflow A (Simulacao):
     1. Correr `python3 scripts/simulate_circuit.py` (ou COMSOL)
     2. Abrir `scripts/params.json` e copiar os valores numericos
     3. Colar nesta funcao e chamar `lake build`
 
+    Workflow B (Testbed Real — VNA/SDR):
+    1. Montar PCB, calibrar VNA, medir S-parameters
+    2. Correr `python3 scripts/vna_capture.py --vna nanovna ...`
+    3. Correr `python3 scripts/sparams_to_params.py --s2p measured.s2p`
+    4. Abrir `scripts/params.json` e copiar os valores MEDIDOS
+    5. Colar nesta funcao e chamar `lake build`
+
     Exemplo:
     ```
     def my_params := params_from_json
-      (M_self := 0.2098811678)
-      (M_mutual := 0.0215134645)
+      (M_self := 0.003112)   -- valor medido do VNA
+      (M_mutual := 0.000004) -- valor medido do VNA
       (Z0 := 50.0)
-      (f := 263.4067)
+      (f := 263.41)          -- estimado da posicao de Eve
     ```
 -/
 def params_from_json (M_self M_mutual Z₀ f : ℝ)
