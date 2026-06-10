@@ -1,0 +1,18 @@
+{
+  "M_self": 0.20988116783269223,
+  "M_mutual": 0.021513464513514543,
+  "Z0": 50.0,
+  "f": 263.4067389714413,
+  "G": 8.395246713307689e-05,
+  "C_self": 6.680725064494534e-12,
+  "L_self": 5.126703281912355e-08,
+  "C_mutual": 6.847948440715834e-13,
+  "M_mutual_H": 5.255028369894564e-09,
+  "min_f_sq": 1.2545077062609706,
+  "weak_coupling_ok": true,
+  "f_sq_ge_min_ok": true,
+  "_metadata": {
+    "source": "simulate_circuit.py",
+    "note": "Valores analiticos aproximados. Usar COMSOL para precisao."
+  }
+}

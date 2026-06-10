@@ -1,0 +1,15 @@
+name = "MaxwellKey"
+version = "0.1.0"
+defaultTargets = ["MaxwellKey", "MaxwellKeyPLUS"]
+
+[[lean_lib]]
+name = "MaxwellKey"
+
+[[lean_lib]]
+name = "MaxwellKeyPLUS"
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+version = "v4.30.0"
+git = "https://github.com/leanprover-community/mathlib4.git"
