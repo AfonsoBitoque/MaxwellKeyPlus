@@ -4,5 +4,7 @@ import MaxwellKeyPLUS.DegradednessGeneral
 import MaxwellKeyPLUS.ExactChannel
 import MaxwellKeyPLUS.ExactChannelHermitian
 import MaxwellKeyPLUS.SecrecyCapacityGeneral
+import MaxwellKeyPLUS.VerifiedFirmware
+import MaxwellKeyPLUS.VerifiedExtraction
 import MaxwellKeyPLUS.Examples.TemplateRealParams
 import MaxwellKeyPLUS.Examples.TwoParallelStripsComputable

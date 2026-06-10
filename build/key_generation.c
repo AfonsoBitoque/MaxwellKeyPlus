@@ -8,6 +8,11 @@
  * verificadas em MaxwellKey/SecrecyCapacity.lean e
  * MaxwellKeyPLUS/DegradednessGeneral.lean.
  *
+ * Para o firmware VERIFICADO (extraido automaticamente do Lean 4),
+ * ver MaxwellKeyPLUS/VerifiedFirmware.lean e build/verified_main.c.
+ * O pipeline verificado evita a traducao manual e garante
+ * equivalencia semantica entre as provas e o codigo executavel.
+ *
  * O firmware real do David deve implementar estas operacoes
  * em hardware (MCU/FPGA) e usar os mesmos parametros que o
  * Lean verifica.

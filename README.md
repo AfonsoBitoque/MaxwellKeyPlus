@@ -83,6 +83,8 @@ MaxwellKey/
 │   ├── ExactChannel.lean           # Exact channel monotonicity (real matrices)
 │   ├── ExactChannelHermitian.lean  # ECMT applied to physical Hermitian model
 │   ├── SecrecyCapacityGeneral.lean # Secrecy capacity with min_f_sq
+│   ├── VerifiedFirmware.lean       # Verified firmware (Float) + correctness proofs
+│   ├── VerifiedExtraction.lean     # Formal C semantics + equivalence proof
 │   ├── IEDP_sketch.md              # Informational Electromagnetic Duality Principle
 │   └── Examples/
 │       ├── TemplateRealParams.lean # Template for experimental parameters
@@ -93,12 +95,18 @@ MaxwellKey/
 │   ├── TestbedArchitecture.md      # Experimental testbed architecture
 │   ├── ExperimentalGuide.md      # VNA/SDR measurement protocol
 │   ├── AuditoriaFinal.md           # Internal audit reports
-│   └── ValidacaoFinal.md           # Validation checklist
+│   ├── ValidacaoFinal.md           # Validation checklist
+│   └── VerifiedExtraction.md       # Verified code extraction (Lean → C) documentation
 │
 ├── scripts/
 │   ├── simulate_circuit.py         # Python fallback circuit simulator
 │   ├── vna_capture.py              # VNA/SDR S-parameter capture
 │   └── sparams_to_params.py        # Convert S-parameters → MaxwellKey params
+│
+├── build/
+│   ├── key_generation.c            # Reference firmware (manual C translation)
+│   ├── verified_main.c             # Verified firmware wrapper (Lean → C)
+│   └── Makefile                    # Build pipeline for verified extraction
 │
 ├── paper/
 │   └── MaxwellKey_Paper.md         # Full conference paper
@@ -136,6 +144,25 @@ MaxwellKey/
 3. **`f_monotone_psd`** — The exact channel transformation `f(A) = I - (I+A)⁻¹` preserves the Loewner order for real PSD matrices of the form `[[a,b],[b,a]]`. The extension to the physical Hermitian model is completed in `ExactChannelHermitian.lean`.
 4. **`secrecy_capacity_pos`** — The secrecy capacity `C_s = C_bob - C_eve` is strictly positive, guaranteeing information-theoretic security.
 5. **`min_f_sq_le_five`** — Under the weak coupling assumption `|M_mutual| < |M_self|/2`, the threshold `min_f_sq ≤ 5`, so `f ≥ 3` is always sufficient.
+
+## Verified Code Extraction (Lean 4 → C)
+
+**Problem:** The original `key_generation.c` was a **manual translation** of Lean proofs into C. Any human error in this translation (rounding error, buffer overflow, sign mistake) invalidates the formal proofs.
+
+**Solution:** `VerifiedFirmware.lean` defines firmware operations in Lean 4 using `Float` (IEEE 754) and proves they preserve security properties. Functions are exported to C via `@[export]`. The Lean 4 compiler generates native code (via C IR) preserving semantics for pure functions.
+
+```
+Lean 4 (VerifiedFirmware.lean) -> lake build -> IR -> C -> gcc -> binary
+```
+
+**Key files:**
+- `MaxwellKeyPLUS/VerifiedFirmware.lean` — Computable firmware + correctness proofs
+- `MaxwellKeyPLUS/VerifiedExtraction.lean` — Formal C semantics + equivalence proof skeleton
+- `build/verified_main.c` — Minimal C wrapper calling exported Lean functions
+- `build/Makefile` — Automated build pipeline
+- `docs/VerifiedExtraction.md` — Full documentation
+
+See `docs/VerifiedExtraction.md` for comparison with HACL*, Everest, CompCert, and VST.
 
 ---
 
