@@ -1,339 +1,427 @@
-# Auditoria Final — MaxwellKey / MaxwellKeyPLUS (v3)
+# Auditoria Final — MaxwellKey / MaxwellKeyPLUS
 
-**Data:** 10 de Junho de 2026  
-**Tipo:** Auditoria hostil completa — todos os artefactos  
-**Estado do build:** ✅ 2000 jobs, 0 erros  
-**Classificação de certeza:** CONFIRMADO (verificável), PROVÁVEL (fortes indícios), POSSÍVEL (suspeita), INCERTO (intuição)
+**Data:** 10 Jun 2026 (4ª passagem, independente)
+**Auditor:** Rui (assistente virtual, auditoria adversarial)
+**Mandato:** Procurar ativamente TODOS os erros, inconsistências, valores "mágicos", código inútil, hipóteses implícitas e más práticas antes de publicação ou demonstração experimental.
 
 ---
 
 ## Sumário Executivo
 
-| Gravidade | Quantidade | IDs |
-|-----------|-----------|-----|
-| CRÍTICO | 0 | — |
-| ALTO | 0 | — |
-| MÉDIO | 0 | — |
-| BAIXO | 0 | — |
+| Gravidade | Contagem |
+|-----------|----------|
+| CRÍTICO   | 4        |
+| ALTO      | 9        |
+| MÉDIO     | 7        |
+| BAIXO     | 5        |
+| **Total** | **25**   |
 
-**Conclusão:** Todas as auditorias consecutivas convergiram. **Todos os problemas identificados foram corrigidos ou documentados:**
-- **Corrigidos no código:** AF-01, AF-03, AF-05, AF-07, AF-09, AF-14, AF-CORE-01, AF-CORE-02, AF-CORE-03, AF-CORE-05, AF-CORE-07, AF-CORE-08
-- **Documentados:** AF-02, AF-04, AF-06, AF-08, AF-10, AF-11, AF-12, AF-13, AF-15
+**Veredicto global:** O projeto é matematicamente robusto no seu cerne — os teoremas principais estão corretos, o build passa (0 erros, 0 sorry), e a generalização para `min_f_sq` é válida. **No entanto**, existem **quatro problemas CRÍTICOS** que podem invalidar a narrativa científica ou introduzir vulnerabilidades no firmware:
 
-O núcleo matemático é sólido, o build é limpo (2000 jobs, 0 erros), e o projeto está **pronto para demonstração experimental e publicação**.
-
----
-
-## Problemas CRÍTICOS (todos corrigidos)
-
-### AF-01 [CORRIGIDO] — `N0` no código C (`key_generation.c`) era inconsistente com o Lean
-
-**Localização:** `build/key_generation.c:26`
-
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
-
-**Descrição (histórico):** O código C definia `N0_DEFAULT = 1.0e-9`, inconsistente com o Lean (`N0 = 4.0038821e-15`). Discrepância de 6 ordens de magnitude.
-
-**Correção aplicada:**
-- `N0_DEFAULT` alterado para `4.0038821e-15` (sincronizado com `TwoParallelStrips.lean`)
-- Comentário adicionado explicando a origem do valor (`k_B * 290 K * 1 MHz`)
-- Comentário no topo do ficheiro clarifica que é uma **tradução manual** das provas Lean, não extração automática
+1. **Gap no canal exato:** O teorema `degradedness_exact` requer uma hipótese mais forte (`S_bob ⪰ S_eve_sym`) do que a que é provada (`S_bob ⪰ S_eve_matrix`). O paper apresenta este resultado como completo quando, de facto, há uma lacuna.
+2. **Paper desatualizado:** O artigo ainda diz que a extensão a matrizes Hermitianas é "future work" e que ExactChannel é "preliminary", quando ambos estão completos no código.
+3. **Inconsistência de parâmetros no firmware C:** O `key_generation.c` mistura parâmetros de duas geometrias diferentes (fallback simulator vs. TwoParallelStrips).
+4. **Vulnerabilidade de segurança no firmware de referência:** `rand()` sem `srand()` gera chaves previsíveis.
 
 ---
 
-### AF-CORE-01 [CORRIGIDO] — O teorema principal `secrecy_capacity_pos` usava o limiar antigo `f ≥ 3`
+## Problemas CRÍTICOS
 
-**Localização:** `MaxwellKey/SecrecyCapacity.lean` (teorema legado)  
-**Relacionado:** `MaxwellKeyPLUS/SecrecyCapacityGeneral.lean` (teorema generalizado)
+### AF-CRIT-01: Gap no Canal Exato — Hipótese Mais Forte Não Provada
 
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
-
-**Descrição (histórico):** O teorema principal da biblioteca (`SecrecyCapacity.lean`) usava `DegradednessParams` com `h_f_ge_three : f >= 3`. O módulo `SecrecyCapacityGeneral.lean` (com `min_f_sq`) existia mas nunca substituíra o teorema principal. O `MaxwellKey.lean` (raiz) não importava `SecrecyCapacityGeneral`.
-
-**Correção aplicada:**
-- `MaxwellKey.lean` agora importa `MaxwellKeyPLUS.SecrecyCapacityGeneral`
-- `TwoParallelStrips.lean` agora contém `example_params_secrecy_general` (SecrecyParamsGeneral) e `secrecy_pos_general_applies` que verifica `secrecy_capacity > 0` com `min_f_sq`
-- O teorema legado (`SecrecyCapacity.lean`) mantém-se para retrocompatibilidade
-
----
-
-### AF-CORE-02 [CORRIGIDO] — `contexto.md` era uma especificação fantasista
-
-**Localização:** `contexto.md` (raiz)
-
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
-
-**Descrição (histórico):** O ficheiro descrevia módulos que não existem (`Reciprocity.lean`, `EPM.lean`, `AMI.lean`, `KeyExtraction.lean`, `COMSOL_Validation.lean`) e afirmava capacidades não implementadas (extração automática de código).
-
-**Correção aplicada:** Ficheiro marcado como `[DESATUALIZADO / OBSOLETO]` no topo com aviso explícito.
+- **Gravidade:** CRÍTICO
+- **Certeza:** CONFIRMADO
+- **Ficheiros:** `MaxwellKeyPLUS/ExactChannel.lean` (linhas 211–218), `MaxwellKeyPLUS/DegradednessGeneral.lean`
+- **Descrição:**
+  - `DegradednessGeneral.S_bob_ge_S_eve` prova `S_bob ⪰ S_eve_matrix`, onde `S_eve_matrix` é uma matriz 2×2 com **apenas** a entrada `(0,0)` não-zero (escalar).
+  - O teorema `ExactChannel.degradedness_exact` requer como **hipótese** `S_bob ⪰ S_eve_sym`, onde `S_eve_sym` é uma matriz 2×2 **diagonal** com o escalar em ambas as posições `(0,0)` e `(1,1)`.
+  - Como `S_eve_sym ⪰ S_eve_matrix`, a condição `S_bob ⪰ S_eve_sym` é **mais forte** que `S_bob ⪰ S_eve_matrix`.
+  - O limiar ótimo para `S_bob ⪰ S_eve_sym` **NÃO é** `min_f_sq`; é um valor maior (equivalente a `f² ≥ ((M_self+M_mutual)/(M_self-M_mutual))²`).
+  - O paper (Secção 5.3, "Theorem 5") apresenta `exact_channel_applies_to_physics` como um resultado completo, sem mencionar que a hipótese `S_bob ⪰ S_eve_sym` não é derivada de `f² ≥ min_f_sq`.
+- **Impacto:** Se alguém usar `min_f_sq` para garantir segurança do canal exato, pode estar a usar um limiar insuficiente. A demonstração experimental poderia falhar se o canal exato for usado.
+- **Sugestão:**
+  - Ou provar que `S_bob ⪰ S_eve_sym` segue de `f² ≥ min_f_sq` (provavelmente falso; requer um novo limiar).
+  - Ou alterar o paper para dizer claramente que o canal exato requer uma condição mais forte, e que `min_f_sq` só garante o modelo aproximado.
+  - Ou remover o teorema `degradedness_exact` do paper até que a lacuna seja fechada.
 
 ---
 
-## Problemas ALTOS (todos corrigidos)
+### AF-CRIT-02: Paper Desatualizado — Declarações Falsas ou Enganosas
 
-### AF-02 [DOCUMENTADO] — Valores de `M_self`/`M_mutual` inconsistentes entre C, Python e Lean
-
-**Localização:** Múltiplos ficheiros
-
-**Estado:** ✅ **DOCUMENTADO em 10 Jun 2026**
-
-**Descrição:** Cada componente usa valores diferentes para os mesmos parâmetros.
-
-| Fonte | M_self | M_mutual | Ratio | Propósito |
-|-------|--------|----------|-------|-----------|
-| `TwoParallelStrips.lean` | 0.0031 | 4.15e-6 | ~0.0013 | Geometria fina (literatura) |
-| `scripts/params.json` / C | 0.2099 | 0.0215 | ~0.10 | Fallback simulator (FR-4 PCB) |
-| `TemplateRealParams` (typical) | 0.6 | 0.15 | 0.25 | Teste `norm_num` (pior caso) |
-
-**Decisão:** Não unificar os valores porque cada conjunto serve para um propósito diferente. O teorema é robusto para qualquer geometria que satisfaça `weak_coupling`.
-
-**Correção aplicada:** Comentários adicionados em `TwoParallelStrips.lean` e `key_generation.c`.
+- **Gravidade:** CRÍTICO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `paper/MaxwellKey_Paper.md`
+- **Descrição:**
+  1. **Linha 25:** "Extension to complex Hermitian matrices is future work." — **FALSO.** O `ExactChannelHermitian.lean` (298 linhas) prova completamente que `H_bob H_bob†` se reduz a uma matriz real simétrica. O teorema `hermitian_to_real_form` está provado e verificado.
+  2. **Linha 87:** "Layer 4 — Exact Channel (preliminary): ... This module is not used in the main security theorems." — **ENGANOSO.** O ExactChannelHermitian conecta o modelo físico ao modelo matemático e é um resultado principal do projeto.
+  3. **Linha 266:** O URL do repositório é `https://github.com/predm/MaxwellKey.git` — **ERRADO.** O repositório real é `https://github.com/AfonsoBitoque/MaxwellKeyPlus.git`.
+  4. **Secção 8.2 (tabela):** A tabela não inclui `VerifiedFirmware.lean`, `VerifiedExtraction.lean`, nem os novos ficheiros de testbed (`TestbedArchitecture.md`, `ExperimentalGuide.md`, etc.).
+- **Impacto:** Submissão do artigo com informação incorreta leva a rejeição ou retratação.
+- **Sugestão:** Atualizar o paper completamente: corrigir o URL, remover "future work" para Hermitian, reescrever a secção do Exact Channel, e atualizar a tabela de artefactos.
 
 ---
 
-### AF-03 [CORRIGIDO] — README desatualizado com referências inexistentes
+### AF-CRIT-03: Mistura de Parâmetros no Firmware C (key_generation.c)
 
-**Localização:** `README.md:96`
-
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
-
-**Correção aplicada:** `Main.lean` removido, módulos PLUS adicionados, tabela de teoremas atualizada.
-
----
-
-### AF-04 [DOCUMENTADO] — Discrepância entre `S_eve_matrix` e `S_eve_sym`
-
-**Localização:** `DegradednessGeneral.lean:144-148` vs `ExactChannel.lean:210-212`
-
-**Estado:** ✅ **DOCUMENTADO em 10 Jun 2026**
-
-**Descrição:** A condição `S_bob ⪰ S_eve_sym` (canal exato) é mais forte que `S_bob ⪰ S_eve_matrix` (teorema generalizado). O limiar ótimo para o canal exato não é `min_f_sq`.
-
-**Correção aplicada:** Comentário extenso adicionado em `ExactChannel.lean` documentando este gap como limitação conhecida.
+- **Gravidade:** CRÍTICO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `build/key_generation.c` (linhas 30–47)
+- **Descrição:**
+  - `N0_DEFAULT = 4.0038821e-15` corresponde ao `TwoParallelStrips.lean` (PCB fina, M_self=0.0031).
+  - `M_SELF = 0.2098811678` e `M_MUTUAL = 0.0215134645` correspondem ao `scripts/simulate_circuit.py` (fallback, geometria diferente).
+  - O comentário (linhas 37–43) admite isto, mas **não justifica porquê** misturar parâmetros de duas geometrias fisicamente distintas num único firmware.
+  - Além disso, `F_ATT = 263.4067` é calculado para o fallback simulator, mas `N0` é do TwoParallelStrips. A relação física entre `N0`, `M_self`, `M_mutual` e `f_att` não é consistente.
+- **Impacto:** O firmware de referência computa uma capacidade de segredo para um cenário fisicamente impossível (parâmetros inconsistentes). Isto invalida qualquer demo que use este firmware.
+- **Sugestão:** Escolher **um** conjunto de parâmetros e usá-lo em todo o lado, ou documentar explicitamente que o firmware C é um "exemplo ilustrativo" e não um cenário físico real.
 
 ---
 
-### AF-05 [CORRIGIDO] — `TemplateRealParams.lean` tinha comentário matematicamente inconsistente sobre `f`
+### AF-CRIT-04: Vulnerabilidade de Segurança — rand() sem srand()
 
-**Localização:** `TemplateRealParams.lean:155-160`
-
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
-
-**Correção aplicada:** Comentário reescrito para explicar que `f = 3` é exemplo de teste para `norm_num`, não estimativa física.
-
----
-
-### AF-CORE-03 [CORRIGIDO] — `TwoParallelStrips.lean` não demonstrava o teorema generalizado de capacidade
-
-**Localização:** `MaxwellKey/Examples/TwoParallelStrips.lean`
-
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
-
-**Descrição (histórico):** O ficheiro continha `example_params` (SecrecyParams, legado) e `example_params_general` (DegradednessParamsGeneral), mas não um `SecrecyParamsGeneral` que verificasse `secrecy_capacity > 0`.
-
-**Correção aplicada:** Adicionados `example_params_secrecy_general` e `secrecy_pos_general_applies` que verificam o teorema principal com `min_f_sq`.
+- **Gravidade:** CRÍTICO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `build/key_generation.c` (linha 160–168)
+- **Descrição:**
+  - `generate_key_bob` chama `rand()` sem nunca chamar `srand()`.
+  - Em C standard, `rand()` sem `srand()` usa a semente 1. A sequência de números é **completamente previsível**.
+  - Isto é um **gerador de chave determinístico mascarado como aleatório**.
+- **Impacto:** Um atacante que conheça a implementação pode prever a chave gerada. O firmware de referência é **criptograficamente inseguro**.
+- **Sugestão:**
+  - Adicionar `srand(time(NULL))` no início de `main()` (ainda fraco, mas melhor).
+  - Ou melhor: documentar claramente que `generate_key_bob` é **apenas uma simulação** e que o firmware real deve usar um TRNG (True Random Number Generator) de hardware.
 
 ---
 
-## Problemas MÉDIOS
+## Problemas de Gravidade ALTA
 
-### AF-06 [DOCUMENTADO] — `Assumptions.lean` tem hipóteses decorativas
+### AF-HIGH-01: Inconsistência numérica — VerifiedFirmware vs. key_generation.c
 
-**Localização:** `Assumptions.lean:58-67`
-
-**Estado:** ✅ **DOCUMENTADO em 10 Jun 2026**
-
-**Correção aplicada:** Comentários extensos adicionados explicando que são placeholders intencionais.
-
----
-
-### AF-07 [CORRIGIDO] — `SecrecyCapacityGeneral.lean` era "órfão"
-
-**Localização:** `MaxwellKeyPLUS.lean:6`
-
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
-
-**Correção aplicada:** Exemplo `example_secrecy_general` adicionado a `TemplateRealParams.lean`.
+- **Gravidade:** ALTO
+- **Certeza:** CONFIRMADO
+- **Ficheiros:** `MaxwellKeyPLUS/VerifiedFirmware.lean`, `build/key_generation.c`
+- **Descrição:**
+  - `VerifiedFirmware.lean` usa `M_self_val_f = 0.003109761664971414` (do TwoParallelStrips).
+  - `key_generation.c` usa `M_SELF = 0.2098811678` (do fallback simulator).
+  - Ambos os firmwares supostamente implementam o mesmo protocolo, mas com parâmetros diferentes. Se alguém comparar os resultados, vão divergir.
+- **Impacto:** Confusão na validação. O "firmware verificado" e o "firmware de referência" não são comparáveis.
+- **Sugestão:** Sincronizar os parâmetros, ou adicionar uma tabela de correspondência clara.
 
 ---
 
-### AF-08 [DOCUMENTADO] — `Extraction.lean` tem teorema trivial e código não computável
+### AF-HIGH-02: Valores "typical" são puramente de conveniência
 
-**Localização:** `Extraction.lean:89-91`
-
-**Estado:** ✅ **JÁ DOCUMENTADO**
-
-**Nota:** Comentários existentes no topo do ficheiro explicam que é um "esboço do protocolo" e que a análise de desempenho é feita informalmente no artigo.
-
----
-
-### AF-09 [CORRIGIDO] — `Simulation.lean` era um placeholder sem simulação
-
-**Localização:** `MaxwellKey/Tests/Simulation.lean` → `SanityChecks.lean`
-
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
-
-**Correção aplicada:** Ficheiro renomeado para `SanityChecks.lean` com comentários atualizados.
+- **Gravidade:** ALTO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKeyPLUS/Examples/TemplateRealParams.lean` (linhas 34–54)
+- **Descrição:**
+  - `typical_M_self = 0.6 = 6/10`, `typical_M_mutual = 0.15 = 15/100`.
+  - O comentário (linha 39–40) admite: "Foram escolhidos como fracoes simples para facilitar as provas `norm_num`."
+  - A razão `M_mutual/M_self = 0.25` é **exatamente metade** do limite de weak_coupling (0.5). Isto é o **pior caso** que ainda passa.
+  - `typical_f = 3` é um "exemplo conservador", mas `compute_eve_distance_factor` calcula `f ≈ 108` para a mesma geometria e ratio=3. Isto é uma **contradição interna**: ou `f=3` é realista, ou `f=108` é realista. Não podem ambos ser.
+- **Impacto:** Os valores "typical" não representam nenhuma geometria física real. Usá-los numa demo seria enganoso.
+- **Sugestão:** Documentar ainda mais claramente que estes valores são **apenas para testes formais** e não representam uma PCB real.
 
 ---
 
-### AF-10 [DOCUMENTADO] — Valores "typical" escolhidos por conveniência
+### AF-HIGH-03: `k_B_float` definida mas nunca usada
 
-**Localização:** `TemplateRealParams.lean:36-44`
-
-**Estado:** ✅ **JÁ DOCUMENTADO**
-
-**Nota:** Comentário extenso já explica que representam o pior caso para `norm_num`.
-
----
-
-### AF-12 [DOCUMENTADO] — `MaxwellKey/Degradedness.lean` é código legado
-
-**Localização:** `MaxwellKey/Degradedness.lean`
-
-**Estado:** ✅ **DOCUMENTADO em 10 Jun 2026**
-
-**Correção aplicada:** Comentário `[LEGADO / OBSOLETO]` adicionado no topo.
+- **Gravidade:** ALTO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKeyPLUS/VerifiedFirmware.lean` (linha 41)
+- **Descrição:**
+  - `def k_B_float : Float := 1.380649e-23` é definida.
+  - `N0_val_f` é hard-coded como `4.0038821e-15` em vez de ser calculado a partir de `k_B_float * T * B`.
+  - O firmware verificado não verifica a consistência física de `N0`.
+- **Impacto:** Se alguém alterar a temperatura ou largura de banda, `N0_val_f` não se atualiza automaticamente. O firmware fica inconsistente.
+- **Sugestão:** Calcular `N0_val_f` a partir de `k_B_float`, temperatura e largura de banda.
 
 ---
 
-### AF-13 [DOCUMENTADO] — `min_f_sq_gt_one` não é usado atualmente
+### AF-HIGH-04: Dependências cruzadas legado/generalizado
 
-**Localização:** `DegradednessGeneral.lean:22`
-
-**Estado:** ✅ **DOCUMENTADO em 10 Jun 2026**
-
-**Correção aplicada:** Comentário explicativo adicionado.
-
----
-
-### AF-14 [CORRIGIDO] — Prova inline em `h_f_sq_ge_min` era confusa
-
-**Localização:** `DegradednessGeneral.lean:128-131`
-
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
-
-**Correção aplicada:** Lema `weak_coupling_implies_lt_self` extraído.
+- **Gravidade:** ALTO
+- **Certeza:** CONFIRMADO
+- **Ficheiros:** `MaxwellKey.lean`, `MaxwellKey/Examples/TwoParallelStrips.lean`, `MaxwellKeyPLUS/Examples/TemplateRealParams.lean`
+- **Descrição:**
+  - `MaxwellKey.lean` (root) importa **ambos** os módulos legados (`Degradedness`, `SecrecyCapacity`) e generalizados (`DegradednessGeneral`, `SecrecyCapacityGeneral`).
+  - `TwoParallelStrips.lean` importa `MaxwellKey.SecrecyCapacity` (legado) **e** `MaxwellKeyPLUS.SecrecyCapacityGeneral` (generalizado).
+  - `TemplateRealParams.lean` importa `MaxwellKey.SecrecyCapacity` (legado) — desnecessário, pois só usa `MaxwellKeyPLUS.SecrecyCapacityGeneral`.
+- **Impacto:** Um utilizador que importe o módulo raiz fica exposto a APIs duplicadas e pode confundir os teoremas legados com os generalizados.
+- **Sugestão:**
+  - `TemplateRealParams.lean`: remover `import MaxwellKey.SecrecyCapacity`.
+  - Considerar deprecar `MaxwellKey/Degradedness.lean` e `MaxwellKey/SecrecyCapacity.lean` e remover os imports do módulo raiz.
 
 ---
 
-### AF-CORE-05 [MÉDIO] [CORRIGIDO] — `Extraction.lean` importava módulos legados
+### AF-HIGH-05: Código inútil em VerifiedExtraction.lean
 
-**Localização:** `MaxwellKey/Extraction.lean:38-39`
-
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
-
-**Descrição (histórico):** O ficheiro importava os módulos legados (`Degradedness`, `SecrecyCapacity`) em vez dos generalizados.
-
-**Correção aplicada:**
-- Imports atualizados para `MaxwellKeyPLUS.DegradednessGeneral` e `MaxwellKeyPLUS.SecrecyCapacityGeneral`
-- Teoremas `secrecy_of_protocol` e `achievable_rate` atualizados para usar `SecrecyParamsGeneral`
-- Comentário adicionado explicando a mudança
-
----
-
-## Problemas BAIXOS
-
-### AF-11 [DOCUMENTADO] — `paper_outline.md` estava desatualizado
-
-**Localização:** `MaxwellKeyPLUS/paper_outline.md`
-
-**Estado:** ✅ **JÁ DOCUMENTADO**
-
-**Nota:** Ficheiro já marcado como `[OBSOLETO]`.
+- **Gravidade:** ALTO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKeyPLUS/VerifiedExtraction.lean`
+- **Descrição:**
+  - `lean_to_c : Lean.Expr → Option CExpr` (linha 108) retorna **sempre** `none`. É uma função fantasma.
+  - `firmware_env : Env := fun _ => 0.0` (linha ~225) é um placeholder inútil.
+  - Os teoremas de correção (`alpha_c_correct`, etc.) foram removidos durante o desenvolvimento porque não compilavam com `Float`. O que resta é um esqueleto sem provas de equivalência.
+- **Impacto:** O módulo `VerifiedExtraction` promete provar a equivalência Lean→C, mas não entrega. A "extracção verificada" é, de facto, **não verificada** ao nível de semântica formal.
+- **Sugestão:**
+  - Ou completar as provas de equivalência (difícil, requer teoria de erros de arredondamento).
+  - Ou reduzir o módulo a um esqueleto documentado, removendo código inútil.
 
 ---
 
-### AF-15 [VERIFICADO] — Script Python calcula `M_self`/`M_mutual` corretamente (assume G=0)
+### AF-HIGH-06: Problema numérico em VerifiedFirmware — perda de precisão
 
-**Localização:** `scripts/simulate_circuit.py:127-130`
-
-**Estado:** ✅ **VERIFICADO**
-
-**Descrição:** O Python calcula `abs(omega*C_self - 1/(omega*L_self))`, que é o valor absoluto da parte imaginária de `Y_self`. Isto está correto no modelo ideal (sem condutância G). Documentado como hipótese implícita.
-
----
-
-### AF-CORE-07 [BAIXO] [CORRIGIDO] — Nomenclatura ambígua: `M_mutual` tinha dois significados
-
-**Localização:** `MaxwellKey/AdmittanceMatrix.lean` vs `MaxwellKeyPLUS/DegradednessGeneral.lean`
-
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
-
-**Descrição (histórico):**
-- Em `AdmittanceMatrix.lean`: `M_mutual` era a **indutância mútua** (Henry)
-- Em `DegradednessGeneral.lean`: `M_mutual` era o **parâmetro normalizado** (adimensional)
-
-**Correção aplicada:**
-- Comentário docstring adicionado em `AdmittanceMatrix.lean` (campo `M_mutual`): "M_mutual aqui é a indutância física (unidade: Henry). No modelo DegradednessGeneral, M_mutual é o parâmetro normalizado."
-- Comentário docstring adicionado em `DegradednessGeneral.lean` (campo `M_mutual`): "Parâmetro de acoplamento mútuo normalizado (adimensional). NÃO é a indutância mútua física."
+- **Gravidade:** ALTO
+- **Certeza:** PROVÁVEL
+- **Ficheiro:** `MaxwellKeyPLUS/VerifiedFirmware.lean` (linhas 54–58)
+- **Descrição:**
+  - `alpha_float = Z0² / N0 ≈ 2500 / 4.0038821e-15 ≈ 6.24e+17`.
+  - `arg_bob = (1 + alpha*(M_self²+M_mutual²))² - (alpha*2*M_self*M_mutual)²`.
+  - `M_self² ≈ 9.67e-6`, logo `alpha*M_self² ≈ 6.24e+17 * 9.67e-6 ≈ 6.03e+12`.
+  - `arg_bob ≈ (6e12)² - (algo)²`. Em Float64 (53 bits de mantissa ≈ 16 dígitos decimais), subtrair dois números de ~10¹² pode perder toda a precisão significativa se forem muito próximos.
+  - O `native_decide` prova que a desigualdade estrita é preservada para estes valores concretos, mas não garante que não há cancelamento catastrófico para outros valores válidos.
+- **Impacto:** Para outros parâmetros físicos, o cálculo em Float pode dar um resultado errado devido a cancelamento, invalidando a verificação runtime.
+- **Sugestão:**
+  - Documentar a limitação numérica.
+  - Considerar usar `Float.log1p` ou reformular os cálculos para evitar cancelamento.
 
 ---
 
-### AF-CORE-08 [BAIXO] [CORRIGIDO] — Hipótese implícita em `QuasiStaticCircuit.h_pos`
+### AF-HIGH-07: `generate_key_bob` imprime apenas 16 bits
 
-**Localização:** `MaxwellKey/AdmittanceMatrix.lean:40`
+- **Gravidade:** ALTO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `build/key_generation.c` (linhas 225–229)
+- **Descrição:**
+  - `uint8_t key[NUM_BITS]` onde `NUM_BITS = 128`.
+  - O loop de impressão: `for (size_t i = 0; i < 16; i++)` imprime apenas 16 bits.
+- **Impacto:** O output é enganoso — parece que a chave tem 16 bits quando na verdade tem 128.
+- **Sugestão:** Imprimir todos os `NUM_BITS` bits.
 
-**Estado:** ✅ **CORRIGIDO em 10 Jun 2026**
+---
 
-**Descrição (histórico):** `h_pos` não incluía `C_mutual > 0` nem `M_mutual > 0`. Se `M_mutual = 0`, `Y_mutual` daria divisão por zero.
+### AF-HIGH-08: SimulationGuide.md documenta G mas Lean não o usa
 
-**Correção aplicada:**
-- `h_pos` atualizado para: `C_self > 0 ∧ L_self > 0 ∧ C_mutual > 0 ∧ M_mutual > 0 ∧ frequency > 0`
-- Comentário adicionado explicando que `C_mutual > 0` e `M_mutual > 0` são necessários para evitar divisão por zero em `Y_mutual`
+- **Gravidade:** ALTO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `docs/SimulationGuide.md` (linha 12, 145–147)
+- **Descrição:**
+  - O guia de simulação lista `G` (condutância) como parâmetro a extrair e inclui fórmulas para calcular G.
+  - O Lean (`AdmittanceMatrix.lean`, `DegradednessGeneral.lean`) assume `G = 0` (sem pernas dielétricas).
+  - O comentário em `AdmittanceMatrix.lean` (linha 42) diz "As pernas no dieletrico sao desprezaveis no regime quase-estatico", mas o SimulationGuide apresenta G como um parâmetro importante.
+- **Impacto:** O David (ou outro utilizador) pode perder tempo a medir G no COMSOL quando o Lean nunca o vai usar.
+- **Sugestão:** Adicionar uma caixa de aviso no topo do SimulationGuide: "NOTA: O modelo Lean atual assume G = 0. A condutância é calculada para referência mas não é usada nas provas formais."
+
+---
+
+### AF-HIGH-09: Inconsistência de representação — `S_eve_matrix` vs. `channel_matrix_eve`
+
+- **Gravidade:** ALTO
+- **Certeza:** CONFIRMADO
+- **Ficheiros:** `MaxwellKey/ChannelMatrix.lean`, `MaxwellKey/Degradedness.lean`
+- **Descrição:**
+  - `channel_matrix_eve` em `ChannelMatrix.lean` é definido como um **escalar complexo** (canal SISO).
+  - `S_eve_matrix` em `Degradedness.lean` é uma matriz **2×2** com apenas `(0,0)` não-zero.
+  - Estas são representações matematicamente diferentes de um canal escalar. A escolha da representação 2×2 com zeros é uma convenção, mas não é explicada no paper.
+- **Impacto:** Pode confundir leitores que esperam que `S_eve` seja 1×1 (como o canal é SISO).
+- **Sugestão:** Documentar a convenção no paper: "Representamos o canal escalar de Eve como uma matriz 2×2 com zeros fora da diagonal para compatibilidade com a ordem de Loewner definida em dimensão 2."
+
+---
+
+## Problemas de Gravidade MÉDIA
+
+### AF-MED-01: `Extraction.lean` é um esqueleto decorativo
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKey/Extraction.lean`
+- **Descrição:**
+  - Define `KeyBit`, `Key`, `sample_channel_bob`, `sample_channel_eve`, `quantize`, etc., como placeholders.
+  - `sample_channel_bob` e `sample_channel_eve` retornam `0`.
+  - O paper menciona `Extraction.lean` na tabela de artefactos como "Hybrid verification approach", mas o ficheiro não contém nenhuma verificação.
+- **Impacto:** Poluição do namespace e confusão sobre o que está realmente implementado.
+- **Sugestão:** Mover para um diretório `draft/` ou renomear para `ExtractionSketch.lean`.
+
+---
+
+### AF-MED-02: Assumptions.lean tem placeholders não documentados no paper
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKeyPLUS/Assumptions.lean` (linhas 63–82)
+- **Descrição:**
+  - `eve_scalar_channel := True`, `linearity := True`, `unit_input_power := True`.
+  - Os comentários explicam que são placeholders, mas o paper NÃO menciona que três das sete hipóteses são decorativas.
+- **Impacto:** Leitores do paper podem assumir que todas as hipóteses estão formalmente verificadas.
+- **Sugestão:** Adicionar uma nota no paper: "Hipóteses 5–7 são trivialmente satisfeitas por construção do modelo."
+
+---
+
+### AF-MED-03: `compute_eve_distance_factor` inconsistente com `typical_f`
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKeyPLUS/Examples/TemplateRealParams.lean` (linhas 148–175)
+- **Descrição:**
+  - `compute_eve_distance_factor` com `distance_ratio=3` dá `f ≈ 108` para typical values.
+  - `typical_f = 3`.
+  - A explicação no comentário (linhas 167–175) admite a inconsistência, mas não a resolve.
+- **Impacto:** Confusão para quem quer usar o template para uma geometria real.
+- **Sugestão:** Calcular `typical_f` a partir de `compute_eve_distance_factor` em vez de hard-codificar 3.
+
+---
+
+### AF-MED-04: `TwoParallelStripsComputable.lean` define `k_B` mas nunca usa
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKeyPLUS/Examples/TwoParallelStripsComputable.lean` (linha 13)
+- **Descrição:**
+  - `def k_B : Float := 1.380649e-23`.
+  - `N0_val` é hard-coded. `k_B` não é referenciada em lado nenhum.
+- **Sugestão:** Ou usar `k_B` para calcular `N0_val`, ou remover.
+
+---
+
+### AF-MED-05: Linter warnings não tratados
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKeyPLUS/ExactChannelHermitian.lean` (linha 15)
+- **Descrição:**
+  - Build gera warnings: "This simp argument is unused" em `ExactChannelHermitian.lean`.
+  - Não são erros, mas indicam código que pode ser simplificado.
+- **Sugestão:** Limpar os simp arguments não usados.
+
+---
+
+### AF-MED-06: `verified_main.c` e `Makefile` são esqueletos não testados
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiros:** `build/verified_main.c`, `build/Makefile`
+- **Descrição:**
+  - O Makefile depende de `lake env lean --sharedlib` que pode não funcionar conforme esperado.
+  - O `verified_main.c` inclui `<lean/lean.h>` que pode não estar no path em sistemas sem Lean instalado.
+  - Não há instruções claras de como compilar o firmware verificado num sistema limpo.
+- **Impacto:** O pipeline de extração verificada pode não funcionar fora da máquina de desenvolvimento.
+- **Sugestão:** Testar o Makefile num sistema limpo e documentar dependências.
+
+---
+
+### AF-MED-07: `contexto.md` obsoleto mas não arquivado
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `contexto.md`
+- **Descrição:**
+  - O ficheiro tem um aviso no topo: "DESATUALIZADO / OBSOLETO".
+  - No entanto, está na raiz do repositório, onde pode ser encontrado por acaso.
+- **Sugestão:** Mover para `docs/historico/contexto.md` ou eliminar.
+
+---
+
+## Problemas de Gravidade BAIXA
+
+### AF-LOW-01: Comentários em português e inglês misturados
+
+- **Gravidade:** BAIXO
+- **Certeza:** CONFIRMADO
+- **Ficheiros:** Vários
+- **Descrição:** Alguns ficheiros (ex: `Extraction.lean`) estão em português, outros (`README.md`, paper) em inglês. A consistência linguística é baixa.
+- **Sugestão:** Escolher uma língua para comentários internos e outra para documentação externa.
+
+---
+
+### AF-LOW-02: `MaxwellKey_Paper.md` — referências sem ficheiro `.bib`
+
+- **Gravidade:** BAIXO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `paper/MaxwellKey_Paper.md`
+- **Descrição:** As referências [1]–[8] estão inline. Não há um ficheiro `.bib` para gestão de bibliografia.
+- **Sugestão:** Criar `paper/references.bib` para submissão formal.
+
+---
+
+### AF-LOW-03: Nomenclatura inconsistente — `M_mutual` vs. `m_mutual`
+
+- **Gravidade:** BAIXO
+- **Certeza:** CONFIRMADO
+- **Ficheiros:** Vários
+- **Descrição:**
+  - `DegradednessGeneral.lean` usa `M_self`, `M_mutual`.
+  - `VerifiedExtraction.lean` usa `mself`, `mmutual`.
+  - `simulate_circuit.py` usa `M_mutual` e `M_mutual_H`.
+- **Sugestão:** Adotar uma convenção e documentá-la.
+
+---
+
+### AF-LOW-04: Paper — contagem de jobs do lake desatualizada
+
+- **Gravidade:** BAIXO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `paper/MaxwellKey_Paper.md` (linha 270)
+- **Descrição:** "compiles ~4000 Lean jobs". O build atual reporta ~2000 jobs. A contagem mudou com versões mais recentes do `lake`.
+- **Sugestão:** Atualizar para "~2000 Lean jobs".
+
+---
+
+### AF-LOW-05: README.md — menção a `G` não contextualizada
+
+- **Gravidade:** BAIXO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `README.md` (linha 86)
+- **Descrição:** O README lista `G` nos parâmetros físicos sem explicar que é ignorado pelo Lean.
+- **Sugestão:** Adicionar "(calculado mas não usado no modelo atual)".
 
 ---
 
 ## Suspeitas Não Confirmadas
 
-1. **O `min_f_sq` é realmente ótimo (tight)?** Provamos que `f² ≥ min_f_sq` é suficiente. Mas não provamos que é necessário. A afirmação "ótimo" no paper pode ser exagerada.
+### AF-SUS-01: Será que `min_f_sq` é realmente ótimo?
 
-2. **A aproximação `H_bob = Z₀·Y` é válida para todos os parâmetros?** O comentário admite que é "aproximação de primeira ordem para acoplamento fraco". Não há estimativa formal do erro.
-
-3. **A matriz `S_bob` realmente corresponde a `H_bob H_bob†`?** O `ExactChannelHermitian.lean` prova a redução, mas a conexão depende de múltiplas simplificações algébricas.
-
-4. **O `compute_eve_distance_factor` em `TemplateRealParams.lean` é usado?** Não — definido mas nunca chamado em exemplos concretos. Mantido como função utilitária para cálculo manual de f a partir da geometria física.
-
-5. **A função `compute_all_params` no Python usa `tan_delta = 0.02`**, mas o Lean ignora G. As perdas no dielétrico são desprezáveis? Para `C_self = 6.68 pF`, `f = 100 MHz`, `G = 2*pi*f*C*tan_delta = 8.4e-5 S`. A admitância reativa é `omega*C = 4.2e-3 S`. O rácio `G/omega*C = 0.02` (2%). Documentado no paper como "future work".
-
-### Nota da Auditoria Independente (5ª passagem)
-
-Esta foi uma auditoria genuinamente independente, reexaminando todo o código com olhos novos. **Não foram encontrados problemas novos significativos.** As provas principais foram reexaminadas:
-- `arg_bob_gt_arg_eve` (SecrecyCapacityGeneral): ✅ Correta. A desigualdade algébrica é verificada por `field_simp` + `ring`.
-- `f_monotone_psd` (ExactChannel): ✅ Correta. Usa redução a autovalores e monotonia escalar de `g(t) = 1 - 1/(1+t)`.
-- `degradedness_loewner_general` (DegradednessGeneral): ✅ Correta. O completamento de quadrados `N*Q_bob - Q_eve*D = (M_self+M_mutual)^2(...)^2` é verificado por `ring`.
-- `min_f_sq_le_five`: ✅ Provado por `nlinarith` com 12 sugestões de quadrados.
+- **Certeza:** INCERTO
+- **Descrição:** O nome `min_f_sq` sugere que é o menor valor possível de `f²` que garante `S_bob ⪰ S_eve_matrix`. Mas a prova usa um completamento de quadrados que dá uma condição suficiente. Não há prova de que não existe um limiar ainda menor.
+- **Nota:** Isto é mais uma questão de nomenclatura do que de erro matemático. A prova está correta para a condição dada.
 
 ---
 
-## Verificações de Rotina
+### AF-SUS-02: O modelo de canal de Eve como escalar é fisicamente correto?
 
-| Verificação | Resultado |
-|-------------|-----------|
-| `grep "sorry" *.lean` | 0 ocorrências ✅ |
-| `grep "axiom" *.lean` | 0 ocorrências ✅ |
-| `grep "admit" *.lean` (tática) | 0 ocorrências ✅ |
-| `lake build` | ✅ 2000 jobs, 0 erros |
-| `ExactChannelHermitian.lean` compila? | ✅ Sim |
-| `SecrecyCapacityGeneral.lean` compila? | ✅ Sim |
-| Teorema principal usa `min_f_sq`? | ✅ Sim (via MaxwellKey.lean + TwoParallelStrips) |
-| `contexto.md` marcado? | ✅ `[DESATUALIZADO]` |
+- **Certeza:** INCERTO
+- **Descrição:** O modelo assume que Eve recebe `H_eve = Z₀·(Y_self + Y_mutual)/f_att`, que é um escalar. Mas fisicamente, se Eve tem uma antena, ela acopla com ambas as pistas. O campo que Eve sente é uma combinação linear das correntes nas duas pistas, não simplesmente a soma das admitâncias.
+- **Nota:** Isto é uma simplificação de modelagem, não um erro matemático. Mas poderia ser mais fisicamente realista modelar Eve como um vetor 2×1.
 
 ---
 
-## Veredicto Final
+### AF-SUS-03: O `native_decide` em `VerifiedFirmware` é fiável?
 
-**O projeto compila e os teoremas principais são matematicamente sólidos.**
-
-**Todos os problemas identificados foram corrigidos ou documentados:**
-- **Corrigidos no código:** AF-01 (N₀), AF-03 (README), AF-05 (comentário f), AF-07 (SecrecyCapacityGeneral), AF-09 (Simulation→SanityChecks), AF-14 (prova inline), AF-CORE-01 (teorema principal), AF-CORE-02 (contexto.md), AF-CORE-03 (TwoParallelStrips generalizado), AF-CORE-05 (Extraction.lean), AF-CORE-07 (nomenclatura M_mutual), AF-CORE-08 (hipótese implícita h_pos)
-- **Documentados:** AF-02 (parâmetros divergentes), AF-04 (gap S_eve), AF-06 (hipóteses decorativas), AF-08 (Extraction esqueleto), AF-10 (valores typical), AF-11 (paper_outline), AF-12 (Degradedness legado), AF-13 (min_f_sq_gt_one), AF-15 (fórmula Python)
-
-**Recomendação:** O projeto está **pronto para demonstração experimental e publicação**. Não há problemas bloqueantes remanescentes.
-
-**Nota:** Após 5 auditorias consecutivas (cada uma reexaminando todo o código com olhos novos), não foram encontrados problemas novos significativos. O núcleo matemático é robusto e o build é estável.
+- **Certeza:** INCERTO
+- **Descrição:** `native_decide` compila a prova para código nativo e executa. Em teoria, se o compilador Lean é correto, o resultado é fiável. Mas `native_decide` para `Float` envolve aritmética IEEE 754 que pode ter comportamento dependente de plataforma (arredondamento, flags de exceção).
+- **Nota:** Para o subconjunto de operações usado (+, -, *, /, <, >), o comportamento é determinístico em IEEE 754. Portanto, `native_decide` é fiável para estes casos.
 
 ---
 
-*Auditoria conduzida por Kimi. INOVATION, 10 de Junho de 2026.*
+## Verificação de Build
 
+```
+lake build: 2002 jobs, 0 erros, 0 sorry, 0 admit, 0 axiom.
+```
+
+**Conclusão do build:** O projeto compila. Não há provas admitidas no código principal.
+
+---
+
+## Recomendações Prioritárias
+
+1. **Corrigir o paper** (AF-CRIT-02): Atualizar todas as secções desatualizadas, corrigir o URL, e adicionar uma nota sobre o gap do canal exato (AF-CRIT-01).
+2. **Consolidar parâmetros** (AF-CRIT-03, AF-HIGH-01): Escolher um único conjunto de parâmetros físicos e usar em todo o lado (C, Python, Lean, paper).
+3. **Documentar o gap do canal exato** (AF-CRIT-01): Adicionar uma secção "Known Limitations" no paper e no README.
+4. **Segurança do firmware C** (AF-CRIT-04): Documentar que `key_generation.c` é apenas uma simulação, não um gerador de chave seguro.
+5. **Limpar código inútil** (AF-HIGH-05, AF-MED-01, AF-MED-04): Remover funções fantasma e placeholders não usados.
+6. **Atualizar SimulationGuide** (AF-HIGH-08): Adicionar aviso sobre G não ser usado no Lean.
+7. **Resolver inconsistência `typical_f`** (AF-HIGH-02, AF-MED-03): Documentar claramente que os valores "typical" são para testes formais, não para geometrias reais.
+
+---
+
+*Auditoria concluída. Todos os problemas listados são genuínos e verificáveis no código. Não foram omitidos problemas por conveniência.*
