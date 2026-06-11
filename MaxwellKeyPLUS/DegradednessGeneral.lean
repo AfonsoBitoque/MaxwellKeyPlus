@@ -71,7 +71,7 @@ lemma min_f_sq_le_five {M_self M_mutual : ℝ} (h_weak : |M_mutual| < |M_self| /
   intro h
   have h_cases : M_self > 0 ∨ M_self < 0 := by
     by_contra h_contra
-    push_neg at h_contra
+    push Not at h_contra
     have h_ms_zero : M_self = 0 := by linarith [h_contra.1, h_contra.2]
     rw [h_ms_zero] at h_weak
     norm_num at h_weak

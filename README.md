@@ -125,15 +125,15 @@ MaxwellKey/
 |--------|----------------------|-------------|
 | `LoewnerOrder` | `Matrix.loewner_le` | Loewner partial order for 2×2 real matrices |
 | `Degradedness` | `S_bob_ge_S_eve` | Original degradedness proof (f ≥ 3) |
-| `SecrecyCapacity` | `secrecy_capacity_pos` | **Main theorem:** secrecy capacity > 0 |
+| `SecrecyCapacity` | `secrecy_capacity_pos` | Main theorem (legacy: f ≥ 3) — kept for backward compatibility |
 | `DegradednessGeneral` | `min_f_sq` | Optimal degradation threshold |
 | `DegradednessGeneral` | `S_bob_ge_S_eve` | Generalized degradedness (f² ≥ min_f_sq) |
 | `ExactChannel` | `f_monotone_psd` | Exact channel monotonicity (real matrices only) |
 | `ExactChannel` | `degradedness_exact` | ECMT applied to MaxwellKey context (preliminary) |
-| `Extraction` | `generate_key_bob` | Key generation protocol sketch |
+| `Draft/ExtractionSketch.lean` | `generate_key_bob` | Key generation protocol sketch (draft, not part of main library) |
 | `Assumptions` | `all_assumptions_satisfied` | Formal hypotheses manifesto |
 | `ExactChannelHermitian` | `hermitian_to_real_form` | Physical Hermitian → real symmetric |
-| `SecrecyCapacityGeneral` | `arg_bob_gt_arg_eve` | Secrecy capacity with min_f_sq |
+| `SecrecyCapacityGeneral` | `secrecy_capacity_pos` | **Main theorem (generalized):** secrecy capacity > 0 with optimal `min_f_sq` threshold |
 
 ---
 
@@ -142,7 +142,7 @@ MaxwellKey/
 1. **`channel_bob_symmetric`** — The channel matrix of Bob is symmetric due to electromagnetic reciprocity.
 2. **`degradedness_loewner_general`** — Under weak coupling and `f² ≥ min_f_sq`, Bob's signal covariance dominates Eve's in the Loewner order.
 3. **`f_monotone_psd`** — The exact channel transformation `f(A) = I - (I+A)⁻¹` preserves the Loewner order for real PSD matrices of the form `[[a,b],[b,a]]`. The extension to the physical Hermitian model is completed in `ExactChannelHermitian.lean`.
-4. **`secrecy_capacity_pos`** — The secrecy capacity `C_s = C_bob - C_eve` is strictly positive, guaranteeing information-theoretic security.
+4. **`secrecy_capacity_pos`** (generalized in `SecrecyCapacityGeneral.lean`) — The secrecy capacity `C_s = C_bob - C_eve` is strictly positive under the optimal threshold `f² ≥ min_f_sq(M_self, M_mutual)`. The legacy version (`SecrecyCapacity.lean`) uses the conservative bound `f ≥ 3`, which is always sufficient by Theorem 5.
 5. **`min_f_sq_le_five`** — Under the weak coupling assumption `|M_mutual| < |M_self|/2`, the threshold `min_f_sq ≤ 5`, so `f ≥ 3` is always sufficient.
 
 ## Verified Code Extraction (Lean 4 → C)

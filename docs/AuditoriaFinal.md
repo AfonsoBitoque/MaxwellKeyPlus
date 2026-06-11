@@ -600,4 +600,92 @@ Após correção dos 4 problemas CRÍTICOS e 21 problemas ALTO/MÉDIO/BAIXO, efe
 
 ---
 
+---
+
+## Auditoria de Follow-up v2 (11 Jun 2026 — 3ª passagem)
+
+Após correção dos problemas anteriores, efetuou-se uma terceira passagem independente.
+
+**Build:** 2000 jobs, 0 erros, 0 sorry, 0 admit, 0 axiom. ✅  
+**Warnings:** 2 (push_neg deprecated; style suggestion em ExactChannel.lean).
+
+---
+
+### AF-FU2-01: `push_neg` deprecated em DegradednessGeneral.lean
+
+- **Gravidade:** BAIXO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKeyPLUS/DegradednessGeneral.lean` (linha 74)
+- **Descrição:** O Lean 4 depreciou `push_neg` em favor de `push Not`. O warning aparece em cada build.
+- **Sugestão:** Substituir `push_neg at h_contra` por `push Not at h_contra`.
+
+---
+
+### AF-FU2-02: README Module Reference ainda lista `Extraction` sem prefixo Draft/
+
+- **Gravidade:** BAIXO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `README.md` (linha 133)
+- **Descrição:** A tabela de módulos lista `Extraction | generate_key_bob | Key generation protocol sketch`. O ficheiro foi movido para `MaxwellKey/Draft/ExtractionSketch.lean` nas correções anteriores, mas o README não reflete o novo path.
+- **Sugestão:** Atualizar para `Draft/ExtractionSketch.lean`.
+
+---
+
+### AF-FU2-03: README "5 Main Theorems" não distingue teorema legado do generalizado
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `README.md` (linhas 128, 144–145)
+- **Descrição:**
+  - A tabela de módulos (linha 128) lista `SecrecyCapacity | secrecy_capacity_pos | **Main theorem:** secrecy capacity > 0`.
+  - Não especifica que é o teorema **LEGADO** (f ≥ 3).
+  - O teorema generalizado (`SecrecyCapacityGeneral.secrecy_capacity_pos`) está listado em linha 136 mas sem o label "Main theorem".
+  - A secção "5 Main Theorems" (linha 144) diz: "`secrecy_capacity_pos` — The secrecy capacity C_s = C_bob - C_eve is strictly positive". Não menciona que existe uma versão generalizada.
+- **Impacto:** Um leitor pode pensar que o teorema principal ainda usa o limiar conservador f ≥ 3, quando a generalização para min_f_sq é o resultado mais forte.
+- **Sugestão:**
+  - Alterar a linha 128 para: `SecrecyCapacity | secrecy_capacity_pos | Main theorem (legacy: f ≥ 3)`.
+  - Alterar a linha 136 para: `SecrecyCapacityGeneral | secrecy_capacity_pos | **Main theorem (generalized):** secrecy capacity > 0 with min_f_sq`.
+  - Na secção "5 Main Theorems", adicionar nota: "The generalized version in `SecrecyCapacityGeneral.lean` replaces the conservative `f ≥ 3` with the exact `min_f_sq` threshold."
+
+---
+
+### AF-FU2-04: Relatórios de auditoria múltiplos não consolidados
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiros:** `docs/AuditoriaFinal.md`, `docs/AuditoriaFinal_v2.md`, `docs/AuditoriaFinal_v3.md`
+- **Descrição:**
+  - O ficheiro `AuditoriaFinal_v3.md` contém o problema **AF-CORE-01** (o teorema principal ainda usa f ≥ 3), que não está integrado no `AuditoriaFinal.md` principal.
+  - O `AuditoriaFinal_v2.md` contém problemas diferentes (N₀ inconsistente, etc.) que já foram corrigidos.
+  - Ter três relatórios de auditoria diferentes é confuso para o Pedro e o Carlos.
+- **Impacto:** Risco de problemas identificados no v3.md serem ignorados porque o relatório "oficial" é o `AuditoriaFinal.md`.
+- **Sugestão:** Consolidar todos os achados no `AuditoriaFinal.md` principal e eliminar os `_v2` e `_v3` (ou arquivá-los em `docs/historico/`).
+
+---
+
+### AF-FU2-05: `MaxwellKey.lean` ainda importa módulos legados como primários
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKey.lean` (linhas 5–6)
+- **Descrição:**
+  - `MaxwellKey.lean` importa `MaxwellKey.Degradedness` e `MaxwellKey.SecrecyCapacity` (legados, f ≥ 3).
+  - Também importa `MaxwellKeyPLUS.DegradednessGeneral` e `MaxwellKeyPLUS.SecrecyCapacityGeneral` (generalizados, min_f_sq).
+  - O comentário (linha 10) diz "Generalized theorems (min_f_sq) — imported from MaxwellKeyPLUS", mas o módulo raiz ainda expõe ambas as APIs como se fossem equivalentes.
+- **Impacto:** Um utilizador que faça `import MaxwellKey` fica exposto a duas versões do mesmo teorema, sem indicação clara de qual é a recomendada.
+- **Sugestão:**
+  - Adicionar comentários nos imports legados: `-- LEGACY: kept for backward compatibility; prefer SecrecyCapacityGeneral`.
+  - Ou mover os módulos legados para uma pasta `MaxwellKey/Legacy/`.
+
+---
+
+## Recomendações Follow-up v2
+
+15. **Corrigir `push_neg` deprecated** (AF-FU2-01): Substituir por `push Not`.
+16. **Atualizar README Module Reference** (AF-FU2-02, AF-FU2-03): Distinguir claramente o teorema legado do generalizado.
+17. **Consolidar relatórios de auditoria** (AF-FU2-04): Unificar todos os achados num único ficheiro.
+18. **Marcar módulos legados no root** (AF-FU2-05): Documentar que `Degradedness.lean` e `SecrecyCapacity.lean` são legados.
+
+---
+
 *Auditoria concluída. Todos os problemas listados são genuínos e verificáveis no código. Não foram omitidos problemas por conveniência.*
