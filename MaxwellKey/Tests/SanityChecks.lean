@@ -22,7 +22,6 @@ namespace MaxwellKey
 namespace SanityChecks
 
 open TwoParallelStrips
-open SecrecyParams
 open SecrecyParamsGeneral
 
 /-- Número de realizações (placeholder — usado apenas como exemplo). -/
@@ -31,30 +30,19 @@ def num_trials : ℕ := 10000
 /-- Largura de banda de exemplo (placeholder). -/
 def sim_bandwidth : ℝ := 1e6
 
-/-- Verificação simples: os argumentos de Bob e Eve são positivos. -/
+/-- Verificação: os argumentos de Bob e Eve são positivos. -/
 theorem args_positive :
-    arg_bob example_params > 0 ∧ arg_eve example_params > 0 :=
-  ⟨arg_bob_pos example_params, arg_eve_pos example_params⟩
-
-/-- Verificação simples: a capacidade de segredo é positiva (teorema LEGADO f ≥ 3). -/
-theorem secrecy_positive :
-    secrecy_capacity example_params > 0 :=
-  secrecy_capacity_pos example_params
-
-/-- Verificação generalizada: os argumentos de Bob e Eve são positivos
-    sob o limiar ótimo min_f_sq. -/
-theorem args_positive_general :
-    SecrecyParamsGeneral.arg_bob example_params_secrecy_general > 0
-    ∧ SecrecyParamsGeneral.arg_eve example_params_secrecy_general > 0 := by
+    arg_bob example_params_secrecy_general > 0
+    ∧ arg_eve example_params_secrecy_general > 0 := by
   constructor
-  · apply SecrecyParamsGeneral.arg_bob_pos example_params_secrecy_general
-  · apply SecrecyParamsGeneral.arg_eve_pos example_params_secrecy_general
+  · apply arg_bob_pos example_params_secrecy_general
+  · apply arg_eve_pos example_params_secrecy_general
 
-/-- Verificação generalizada: a capacidade de segredo é positiva
+/-- Verificação: a capacidade de segredo é positiva
     sob o limiar ótimo min_f_sq (TEOREMA PRINCIPAL). -/
-theorem secrecy_positive_general :
-    SecrecyParamsGeneral.secrecy_capacity example_params_secrecy_general > 0 :=
-  SecrecyParamsGeneral.secrecy_capacity_pos example_params_secrecy_general
+theorem secrecy_positive :
+    secrecy_capacity example_params_secrecy_general > 0 :=
+  secrecy_capacity_pos example_params_secrecy_general
 
 end SanityChecks
 

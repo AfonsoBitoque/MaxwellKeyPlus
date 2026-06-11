@@ -22,16 +22,17 @@
   Cada conjunto serve para um proposito diferente; o teorema e robusto
   para qualquer geometria que satisfaca weak_coupling.
 
-  Este ficheiro demonstra AMBOS os teoremas:
-  1. O teorema original (f >= 3) via SecrecyParams
-  2. O teorema generalizado (f^2 >= min_f_sq) via DegradednessParamsGeneral
+  Este ficheiro demonstra o teorema generalizado
+  (f^2 >= min_f_sq) via DegradednessParamsGeneral.
+
+  NOTA: A versao legada com f >= 3 foi removida.
+  Citar SEMPRE o teorema generalizado em publicacoes.
 -/
 
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Base
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Linarith
-import MaxwellKey.SecrecyCapacity
 import MaxwellKeyPLUS.DegradednessGeneral
 import MaxwellKeyPLUS.SecrecyCapacityGeneral
 
@@ -39,32 +40,12 @@ namespace MaxwellKey
 
 namespace TwoParallelStrips
 
-open SecrecyParams
-
 /-- Valores fisicos (calculados previamente para evitar noncomputability com Real.pi). -/
 def M_self_val : ℝ := 0.003109761664971414
 def M_mutual_val : ℝ := 0.000004150620831811415
 def Z₀_val : ℝ := 50.0
 def eve_factor : ℝ := 5.0
 def N0_val : ℝ := 4.0038821e-15
-
-/-- Instancia concreta de SecrecyParams (teorema original, f >= 3). -/
-def example_params : SecrecyParams where
-  M_self := M_self_val
-  M_mutual := M_mutual_val
-  Z₀ := Z₀_val
-  f := eve_factor
-  h_Z₀_pos := by norm_num [Z₀_val]
-  h_f_ge_three := by norm_num [eve_factor]
-  h_weak := by norm_num [M_self_val, M_mutual_val]
-  h_M_self_pos := by norm_num [M_self_val]
-  N0 := N0_val
-  h_N0_pos := by norm_num [N0_val]
-
-/-- Verificacao: o teorema de capacidade de segredo positiva aplica-se. -/
-lemma secrecy_pos_applies :
-    secrecy_capacity example_params > 0 :=
-  secrecy_capacity_pos example_params
 
 /-- Prova auxiliar: |M_mutual| < |M_self| (condicao mais fraca que weak coupling). -/
 lemma h_mut_lt_self : |M_mutual_val| < |M_self_val| := by

@@ -1,17 +1,18 @@
 /-
   MaxwellKey / SecrecyCapacity.lean
   ---------------------------------
-  Teorema principal: a capacidade de segredo do canal
-  eletromagnético é estritamente positiva.
+  ⚠️  DEPRECATED — DO NOT CITE IN PUBLICATIONS
 
-  Modelo:
-  - Bob: canal 2×2 com matriz de sinal S_bob e ruído N₀·I.
-  - Eve: canal escalar com sinal S_eve e ruído N₀.
-  - C_bob = (1/2)·log₂ det(I + S_bob/N₀)
-  - C_eve = (1/2)·log₂(1 + S_eve/N₀)
+  Este modulo contem a prova ORIGINAL de capacidade de segredo
+  com o limiar CONSERVADOR f >= 3 (hardcoded). Foi SUBSTITUIDO
+  por SecrecyCapacityGeneral.lean (MaxwellKeyPLUS), que usa o
+  limiar OTIMO min_f_sq(M_self, M_mutual).
 
-  Sob acoplamento fraco e fator de distância f ≥ 3,
-  provamos C_bob > C_eve, logo C_s > 0.
+  Razao: f >= 3 e arbitrariamente conservador. min_f_sq e a
+  condicao EXATA derivada do modelo de admitancias.
+
+  MANTIDO APENAS PARA RETROCOMPATIBILIDADE.
+  Para novos trabalhos, CITAR SEMPRE SecrecyCapacityGeneral.lean.
 -/
 
 import Mathlib.Data.Real.Basic

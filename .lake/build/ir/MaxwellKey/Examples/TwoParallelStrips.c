@@ -1,0 +1,331 @@
+// Lean compiler output
+// Module: MaxwellKey.Examples.TwoParallelStrips
+// Imports: public import Init public meta import Init public import Mathlib.Data.Real.Basic public import Mathlib.Analysis.SpecialFunctions.Log.Base public import Mathlib.Tactic.NormNum public import Mathlib.Tactic.Linarith public import MaxwellKeyPLUS.DegradednessGeneral public import MaxwellKeyPLUS.SecrecyCapacityGeneral
+#include <lean/lean.h>
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#pragma clang diagnostic ignored "-Wunused-label"
+#elif defined(__GNUC__) && !defined(__CLANG__)
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-label"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
+#ifdef __cplusplus
+extern "C" {
+#endif
+lean_object* l_Rat_ofScientific(lean_object*, uint8_t, lean_object*);
+lean_object* lp_mathlib_CauSeq_const___at___00CauSeq_Completion_ofRat___at___00Real_definition_00___x40_Mathlib_Data_Real_Basic_1850581184____hygCtx___hyg_8__spec__2_spec__3___redArg___lam__0___boxed(lean_object*, lean_object*);
+LEAN_EXPORT lean_object* lp_MaxwellKey_NNRat_cast___at___00NNRat_cast___at___00MaxwellKey_TwoParallelStrips_M__self__val_spec__0_spec__0(lean_object*);
+LEAN_EXPORT lean_object* lp_MaxwellKey_NNRat_cast___at___00MaxwellKey_TwoParallelStrips_M__self__val_spec__0(lean_object*);
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__0;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__1_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__1;
+LEAN_EXPORT lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val;
+LEAN_EXPORT lean_object* lp_MaxwellKey_NNRat_cast___at___00NNRat_cast___at___00NNRat_cast___at___00MaxwellKey_TwoParallelStrips_M__self__val_spec__0_spec__0_spec__1(lean_object*);
+LEAN_EXPORT lean_object* lp_MaxwellKey_NNRat_cast___at___00NNRat_cast___at___00NNRat_cast___at___00MaxwellKey_TwoParallelStrips_M__self__val_spec__0_spec__0_spec__1___boxed(lean_object*);
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__0;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__1_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__1;
+LEAN_EXPORT lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__0;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__1_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__1;
+LEAN_EXPORT lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__0;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__1_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__1;
+LEAN_EXPORT lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__0;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__1_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__1;
+LEAN_EXPORT lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general___closed__0;
+LEAN_EXPORT lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__secrecy__general___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__secrecy__general___closed__0;
+LEAN_EXPORT lean_object* lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__secrecy__general;
+LEAN_EXPORT lean_object* lp_MaxwellKey_NNRat_cast___at___00NNRat_cast___at___00MaxwellKey_TwoParallelStrips_M__self__val_spec__0_spec__0(lean_object* v_a_1_){
+_start:
+{
+lean_object* v___f_2_; 
+v___f_2_ = lean_alloc_closure((void*)(lp_mathlib_CauSeq_const___at___00CauSeq_Completion_ofRat___at___00Real_definition_00___x40_Mathlib_Data_Real_Basic_1850581184____hygCtx___hyg_8__spec__2_spec__3___redArg___lam__0___boxed), 2, 1);
+lean_closure_set(v___f_2_, 0, v_a_1_);
+return v___f_2_;
+}
+}
+LEAN_EXPORT lean_object* lp_MaxwellKey_NNRat_cast___at___00MaxwellKey_TwoParallelStrips_M__self__val_spec__0(lean_object* v_a_3_){
+_start:
+{
+lean_object* v___f_4_; 
+v___f_4_ = lean_alloc_closure((void*)(lp_mathlib_CauSeq_const___at___00CauSeq_Completion_ofRat___at___00Real_definition_00___x40_Mathlib_Data_Real_Basic_1850581184____hygCtx___hyg_8__spec__2_spec__3___redArg___lam__0___boxed), 2, 1);
+lean_closure_set(v___f_4_, 0, v_a_3_);
+return v___f_4_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__0(void){
+_start:
+{
+lean_object* v___x_5_; uint8_t v___x_6_; lean_object* v___x_7_; lean_object* v___x_8_; 
+v___x_5_ = lean_unsigned_to_nat(18u);
+v___x_6_ = 1;
+v___x_7_ = lean_cstr_to_nat("3109761664971414");
+v___x_8_ = l_Rat_ofScientific(v___x_7_, v___x_6_, v___x_5_);
+return v___x_8_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__1(void){
+_start:
+{
+lean_object* v___x_9_; lean_object* v___f_10_; 
+v___x_9_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__0);
+v___f_10_ = lean_alloc_closure((void*)(lp_mathlib_CauSeq_const___at___00CauSeq_Completion_ofRat___at___00Real_definition_00___x40_Mathlib_Data_Real_Basic_1850581184____hygCtx___hyg_8__spec__2_spec__3___redArg___lam__0___boxed), 2, 1);
+lean_closure_set(v___f_10_, 0, v___x_9_);
+return v___f_10_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val(void){
+_start:
+{
+lean_object* v___f_11_; 
+v___f_11_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__1, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__1_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val___closed__1);
+return v___f_11_;
+}
+}
+LEAN_EXPORT lean_object* lp_MaxwellKey_NNRat_cast___at___00NNRat_cast___at___00NNRat_cast___at___00MaxwellKey_TwoParallelStrips_M__self__val_spec__0_spec__0_spec__1(lean_object* v_a_12_){
+_start:
+{
+lean_inc_ref(v_a_12_);
+return v_a_12_;
+}
+}
+LEAN_EXPORT lean_object* lp_MaxwellKey_NNRat_cast___at___00NNRat_cast___at___00NNRat_cast___at___00MaxwellKey_TwoParallelStrips_M__self__val_spec__0_spec__0_spec__1___boxed(lean_object* v_a_13_){
+_start:
+{
+lean_object* v_res_14_; 
+v_res_14_ = lp_MaxwellKey_NNRat_cast___at___00NNRat_cast___at___00NNRat_cast___at___00MaxwellKey_TwoParallelStrips_M__self__val_spec__0_spec__0_spec__1(v_a_13_);
+lean_dec_ref(v_a_13_);
+return v_res_14_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__0(void){
+_start:
+{
+lean_object* v___x_15_; uint8_t v___x_16_; lean_object* v___x_17_; lean_object* v___x_18_; 
+v___x_15_ = lean_unsigned_to_nat(21u);
+v___x_16_ = 1;
+v___x_17_ = lean_cstr_to_nat("4150620831811415");
+v___x_18_ = l_Rat_ofScientific(v___x_17_, v___x_16_, v___x_15_);
+return v___x_18_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__1(void){
+_start:
+{
+lean_object* v___x_19_; lean_object* v___f_20_; 
+v___x_19_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__0);
+v___f_20_ = lean_alloc_closure((void*)(lp_mathlib_CauSeq_const___at___00CauSeq_Completion_ofRat___at___00Real_definition_00___x40_Mathlib_Data_Real_Basic_1850581184____hygCtx___hyg_8__spec__2_spec__3___redArg___lam__0___boxed), 2, 1);
+lean_closure_set(v___f_20_, 0, v___x_19_);
+return v___f_20_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val(void){
+_start:
+{
+lean_object* v___f_21_; 
+v___f_21_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__1, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__1_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val___closed__1);
+return v___f_21_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__0(void){
+_start:
+{
+lean_object* v___x_22_; uint8_t v___x_23_; lean_object* v___x_24_; lean_object* v___x_25_; 
+v___x_22_ = lean_unsigned_to_nat(1u);
+v___x_23_ = 1;
+v___x_24_ = lean_unsigned_to_nat(500u);
+v___x_25_ = l_Rat_ofScientific(v___x_24_, v___x_23_, v___x_22_);
+return v___x_25_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__1(void){
+_start:
+{
+lean_object* v___x_26_; lean_object* v___f_27_; 
+v___x_26_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__0);
+v___f_27_ = lean_alloc_closure((void*)(lp_mathlib_CauSeq_const___at___00CauSeq_Completion_ofRat___at___00Real_definition_00___x40_Mathlib_Data_Real_Basic_1850581184____hygCtx___hyg_8__spec__2_spec__3___redArg___lam__0___boxed), 2, 1);
+lean_closure_set(v___f_27_, 0, v___x_26_);
+return v___f_27_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val(void){
+_start:
+{
+lean_object* v___f_28_; 
+v___f_28_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__1, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__1_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val___closed__1);
+return v___f_28_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__0(void){
+_start:
+{
+lean_object* v___x_29_; uint8_t v___x_30_; lean_object* v___x_31_; lean_object* v___x_32_; 
+v___x_29_ = lean_unsigned_to_nat(1u);
+v___x_30_ = 1;
+v___x_31_ = lean_unsigned_to_nat(50u);
+v___x_32_ = l_Rat_ofScientific(v___x_31_, v___x_30_, v___x_29_);
+return v___x_32_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__1(void){
+_start:
+{
+lean_object* v___x_33_; lean_object* v___f_34_; 
+v___x_33_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__0);
+v___f_34_ = lean_alloc_closure((void*)(lp_mathlib_CauSeq_const___at___00CauSeq_Completion_ofRat___at___00Real_definition_00___x40_Mathlib_Data_Real_Basic_1850581184____hygCtx___hyg_8__spec__2_spec__3___redArg___lam__0___boxed), 2, 1);
+lean_closure_set(v___f_34_, 0, v___x_33_);
+return v___f_34_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor(void){
+_start:
+{
+lean_object* v___f_35_; 
+v___f_35_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__1, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__1_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor___closed__1);
+return v___f_35_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__0(void){
+_start:
+{
+lean_object* v___x_36_; uint8_t v___x_37_; lean_object* v___x_38_; lean_object* v___x_39_; 
+v___x_36_ = lean_unsigned_to_nat(22u);
+v___x_37_ = 1;
+v___x_38_ = lean_unsigned_to_nat(40038821u);
+v___x_39_ = l_Rat_ofScientific(v___x_38_, v___x_37_, v___x_36_);
+return v___x_39_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__1(void){
+_start:
+{
+lean_object* v___x_40_; lean_object* v___f_41_; 
+v___x_40_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__0);
+v___f_41_ = lean_alloc_closure((void*)(lp_mathlib_CauSeq_const___at___00CauSeq_Completion_ofRat___at___00Real_definition_00___x40_Mathlib_Data_Real_Basic_1850581184____hygCtx___hyg_8__spec__2_spec__3___redArg___lam__0___boxed), 2, 1);
+lean_closure_set(v___f_41_, 0, v___x_40_);
+return v___f_41_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val(void){
+_start:
+{
+lean_object* v___f_42_; 
+v___f_42_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__1, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__1_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val___closed__1);
+return v___f_42_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general___closed__0(void){
+_start:
+{
+lean_object* v___x_43_; lean_object* v___x_44_; lean_object* v___x_45_; lean_object* v___x_46_; lean_object* v___x_47_; 
+v___x_43_ = lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor;
+v___x_44_ = lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val;
+v___x_45_ = lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val;
+v___x_46_ = lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val;
+v___x_47_ = lean_alloc_ctor(0, 4, 0);
+lean_ctor_set(v___x_47_, 0, v___x_46_);
+lean_ctor_set(v___x_47_, 1, v___x_45_);
+lean_ctor_set(v___x_47_, 2, v___x_44_);
+lean_ctor_set(v___x_47_, 3, v___x_43_);
+return v___x_47_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general(void){
+_start:
+{
+lean_object* v___x_48_; 
+v___x_48_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general___closed__0);
+return v___x_48_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__secrecy__general___closed__0(void){
+_start:
+{
+lean_object* v___x_49_; lean_object* v___x_50_; lean_object* v___x_51_; 
+v___x_49_ = lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val;
+v___x_50_ = lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general;
+v___x_51_ = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(v___x_51_, 0, v___x_50_);
+lean_ctor_set(v___x_51_, 1, v___x_49_);
+return v___x_51_;
+}
+}
+static lean_object* _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__secrecy__general(void){
+_start:
+{
+lean_object* v___x_52_; 
+v___x_52_ = lean_obj_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__secrecy__general___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__secrecy__general___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__secrecy__general___closed__0);
+return v___x_52_;
+}
+}
+lean_object* initialize_Init(uint8_t builtin);
+lean_object* initialize_Init(uint8_t builtin);
+lean_object* initialize_mathlib_Mathlib_Data_Real_Basic(uint8_t builtin);
+lean_object* initialize_mathlib_Mathlib_Analysis_SpecialFunctions_Log_Base(uint8_t builtin);
+lean_object* initialize_mathlib_Mathlib_Tactic_NormNum(uint8_t builtin);
+lean_object* initialize_mathlib_Mathlib_Tactic_Linarith(uint8_t builtin);
+lean_object* initialize_MaxwellKey_MaxwellKeyPLUS_DegradednessGeneral(uint8_t builtin);
+lean_object* initialize_MaxwellKey_MaxwellKeyPLUS_SecrecyCapacityGeneral(uint8_t builtin);
+static bool _G_initialized = false;
+LEAN_EXPORT lean_object* initialize_MaxwellKey_MaxwellKey_Examples_TwoParallelStrips(uint8_t builtin) {
+lean_object * res;
+if (_G_initialized) return lean_io_result_mk_ok(lean_box(0));
+_G_initialized = true;
+res = initialize_Init(builtin);
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_Init(builtin);
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_mathlib_Mathlib_Data_Real_Basic(builtin);
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_mathlib_Mathlib_Analysis_SpecialFunctions_Log_Base(builtin);
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_mathlib_Mathlib_Tactic_NormNum(builtin);
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_mathlib_Mathlib_Tactic_Linarith(builtin);
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_MaxwellKey_MaxwellKeyPLUS_DegradednessGeneral(builtin);
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_MaxwellKey_MaxwellKeyPLUS_SecrecyCapacityGeneral(builtin);
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val();
+lean_mark_persistent(lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__self__val);
+lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val();
+lean_mark_persistent(lp_MaxwellKey_MaxwellKey_TwoParallelStrips_M__mutual__val);
+lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val();
+lean_mark_persistent(lp_MaxwellKey_MaxwellKey_TwoParallelStrips_Z_u2080__val);
+lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor();
+lean_mark_persistent(lp_MaxwellKey_MaxwellKey_TwoParallelStrips_eve__factor);
+lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val();
+lean_mark_persistent(lp_MaxwellKey_MaxwellKey_TwoParallelStrips_N0__val);
+lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general();
+lean_mark_persistent(lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__general);
+lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__secrecy__general = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__secrecy__general();
+lean_mark_persistent(lp_MaxwellKey_MaxwellKey_TwoParallelStrips_example__params__secrecy__general);
+return lean_io_result_mk_ok(lean_box(0));
+}
+#ifdef __cplusplus
+}
+#endif

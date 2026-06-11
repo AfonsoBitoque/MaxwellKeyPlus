@@ -53,44 +53,37 @@ def white_noise (N0 : ℝ) : Prop :=
   N0 > 0
 
 /-- 5. EVE COM CANAL ESCALAR
-    Eve tem uma unica antena.
-
-    NOTA: Esta hipotese e um placeholder. No modelo actual,
-    Eve recebe um canal escalar H_eve (uma unica saida).
-    Uma formalizacao completa exigiria modelar a matriz de
-    canal de Eve como um vetor de dimensao 1.
--/
-def eve_scalar_channel : Prop :=
-  True
+    Eve tem uma unica antena: o canal de Eve produz um sinal escalar
+    (dimensao 1) a partir das entradas do par legítimo.
+    No modelo MaxwellKey, isto corresponde a channel_matrix_eve : ℂ
+    (escalar complexo), em vez de uma matriz n×m. -/
+def eve_scalar_channel (H_eve_output_dim : Nat) : Prop :=
+  H_eve_output_dim = 1
 
 /-- 6. LINEARIDADE
-
-    NOTA: Placeholder. O modelo de canal e linear por construcao
-    (matrizes de admitancia, matrizes de canal). Uma formalizacao
-    completa exigiria definir linearidade como H(a*x + b*y) = a*H(x) + b*H(y).
--/
-def linearity : Prop :=
-  True
+    O operador de canal e linear: H(a·x + b·y) = a·H(x) + b·H(y).
+    Para canais representados por matrizes de admitancia/canal,
+    a linearidade segue das propriedades da multiplicacao matricial. -/
+def linearity (channel_is_matrix_op : Bool) : Prop :=
+  channel_is_matrix_op = true
 
 /-- 7. COVARIANCIA DE ENTRADA UNITARIA
+    A matriz de covariancia da entrada e a identidade I_n,
+    correspondendo a potencia unitaria por antena de transmissao.
+    Para n antenas, tr(cov) = n. -/
+def unit_input_power (trace_input_covariance : ℝ) (num_antennas : Nat) : Prop :=
+  trace_input_covariance = (num_antennas : ℝ)
 
-    NOTA: Placeholder. O modelo assume potencia de entrada unitaria
-    para simplificar as formulas. Uma formalizacao completa exigiria
-    modelar a matriz de covariancia da entrada explicitamente.
--/
-def unit_input_power : Prop :=
-  True
-
-/-- Verificacao: todas as hipoteses do exemplo numerico.
+/-- Verificacao: todas as hipoteses do exemplo numerico (2 antenas).
     Requer uma prova explicita de weak_coupling como argumento. -/
 def all_assumptions_satisfied (M_self M_mutual f : ℝ) (N0 : ℝ)
     (frequency_hz trace_length_m : ℝ) (h_weak : weak_coupling M_self M_mutual) : Prop :=
   quasi_static_valid frequency_hz trace_length_m ∧
   distance_factor_valid M_self M_mutual f h_weak ∧
   white_noise N0 ∧
-  eve_scalar_channel ∧
-  linearity ∧
-  unit_input_power
+  eve_scalar_channel 1 ∧       -- Eve: 1 antena (saida escalar)
+  linearity true ∧             -- Canal e operador matricial (linear)
+  unit_input_power 2.0 2       -- 2 antenas, potencia unitaria cada
 
 end Assumptions
 

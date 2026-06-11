@@ -1,0 +1,548 @@
+// Lean compiler output
+// Module: MaxwellKeyPLUS.Examples.TwoParallelStripsComputable
+// Imports: public import Init public meta import Init
+#include <lean/lean.h>
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#pragma clang diagnostic ignored "-Wunused-label"
+#elif defined(__GNUC__) && !defined(__CLANG__)
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-label"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
+#ifdef __cplusplus
+extern "C" {
+#endif
+double l_Float_ofScientific(lean_object*, uint8_t, lean_object*);
+double lean_float_mul(double, double);
+double lean_float_of_nat(lean_object*);
+double lean_float_add(double, double);
+double pow(double, double);
+double lean_float_div(double, double);
+double log2(double);
+double lean_float_sub(double, double);
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val___closed__0;
+LEAN_EXPORT double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val___closed__0;
+LEAN_EXPORT double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_Z_u2080__val___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_Z_u2080__val___closed__0;
+LEAN_EXPORT double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_Z_u2080__val;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_eve__factor___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_eve__factor___closed__0;
+LEAN_EXPORT double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_eve__factor;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_N0__val___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_N0__val___closed__0;
+LEAN_EXPORT double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_N0__val;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__0;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__1_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__1;
+LEAN_EXPORT double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__0;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__1_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__1;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__2_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__2;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__3_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__3;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__4_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__4;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__5_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__5;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__7_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__7;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__8_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__8;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__9_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__9;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__10_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__10;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__11_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__11;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__12_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__12;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__13_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__13;
+LEAN_EXPORT double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__0;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__1_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__1;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__2_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__2;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__3_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__3;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__4_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__4;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__5_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__5;
+LEAN_EXPORT double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__0;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__1_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__1;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__2_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__2;
+LEAN_EXPORT double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__0;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__1_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__1;
+LEAN_EXPORT double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve;
+static lean_once_cell_t lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_secrecy__capacity___closed__0_once = LEAN_ONCE_CELL_INITIALIZER;
+static double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_secrecy__capacity___closed__0;
+LEAN_EXPORT double lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_secrecy__capacity;
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val___closed__0(void){
+_start:
+{
+lean_object* v___x_1_; uint8_t v___x_2_; lean_object* v___x_3_; double v___x_4_; 
+v___x_1_ = lean_unsigned_to_nat(18u);
+v___x_2_ = 1;
+v___x_3_ = lean_cstr_to_nat("3109761664971414");
+v___x_4_ = l_Float_ofScientific(v___x_3_, v___x_2_, v___x_1_);
+return v___x_4_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val(void){
+_start:
+{
+double v___x_5_; 
+v___x_5_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val___closed__0);
+return v___x_5_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val___closed__0(void){
+_start:
+{
+lean_object* v___x_6_; uint8_t v___x_7_; lean_object* v___x_8_; double v___x_9_; 
+v___x_6_ = lean_unsigned_to_nat(21u);
+v___x_7_ = 1;
+v___x_8_ = lean_cstr_to_nat("4150620831811415");
+v___x_9_ = l_Float_ofScientific(v___x_8_, v___x_7_, v___x_6_);
+return v___x_9_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val(void){
+_start:
+{
+double v___x_10_; 
+v___x_10_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val___closed__0);
+return v___x_10_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_Z_u2080__val___closed__0(void){
+_start:
+{
+lean_object* v___x_11_; uint8_t v___x_12_; lean_object* v___x_13_; double v___x_14_; 
+v___x_11_ = lean_unsigned_to_nat(1u);
+v___x_12_ = 1;
+v___x_13_ = lean_unsigned_to_nat(500u);
+v___x_14_ = l_Float_ofScientific(v___x_13_, v___x_12_, v___x_11_);
+return v___x_14_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_Z_u2080__val(void){
+_start:
+{
+double v___x_15_; 
+v___x_15_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_Z_u2080__val___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_Z_u2080__val___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_Z_u2080__val___closed__0);
+return v___x_15_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_eve__factor___closed__0(void){
+_start:
+{
+lean_object* v___x_16_; uint8_t v___x_17_; lean_object* v___x_18_; double v___x_19_; 
+v___x_16_ = lean_unsigned_to_nat(1u);
+v___x_17_ = 1;
+v___x_18_ = lean_unsigned_to_nat(50u);
+v___x_19_ = l_Float_ofScientific(v___x_18_, v___x_17_, v___x_16_);
+return v___x_19_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_eve__factor(void){
+_start:
+{
+double v___x_20_; 
+v___x_20_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_eve__factor___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_eve__factor___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_eve__factor___closed__0);
+return v___x_20_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_N0__val___closed__0(void){
+_start:
+{
+lean_object* v___x_21_; uint8_t v___x_22_; lean_object* v___x_23_; double v___x_24_; 
+v___x_21_ = lean_unsigned_to_nat(22u);
+v___x_22_ = 1;
+v___x_23_ = lean_unsigned_to_nat(40038821u);
+v___x_24_ = l_Float_ofScientific(v___x_23_, v___x_22_, v___x_21_);
+return v___x_24_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_N0__val(void){
+_start:
+{
+double v___x_25_; 
+v___x_25_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_N0__val___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_N0__val___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_N0__val___closed__0);
+return v___x_25_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__0(void){
+_start:
+{
+double v___x_26_; double v___x_27_; 
+v___x_26_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_Z_u2080__val;
+v___x_27_ = lean_float_mul(v___x_26_, v___x_26_);
+return v___x_27_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__1(void){
+_start:
+{
+double v___x_28_; double v___x_29_; double v___x_30_; 
+v___x_28_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_N0__val;
+v___x_29_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__0);
+v___x_30_ = lean_float_div(v___x_29_, v___x_28_);
+return v___x_30_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha(void){
+_start:
+{
+double v___x_31_; 
+v___x_31_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__1, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__1_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha___closed__1);
+return v___x_31_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__0(void){
+_start:
+{
+lean_object* v___x_32_; uint8_t v___x_33_; lean_object* v___x_34_; double v___x_35_; 
+v___x_32_ = lean_unsigned_to_nat(1u);
+v___x_33_ = 1;
+v___x_34_ = lean_unsigned_to_nat(10u);
+v___x_35_ = l_Float_ofScientific(v___x_34_, v___x_33_, v___x_32_);
+return v___x_35_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__1(void){
+_start:
+{
+double v___x_36_; double v___x_37_; 
+v___x_36_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val;
+v___x_37_ = lean_float_mul(v___x_36_, v___x_36_);
+return v___x_37_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__2(void){
+_start:
+{
+double v___x_38_; double v___x_39_; 
+v___x_38_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val;
+v___x_39_ = lean_float_mul(v___x_38_, v___x_38_);
+return v___x_39_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__3(void){
+_start:
+{
+double v___x_40_; double v___x_41_; double v___x_42_; 
+v___x_40_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__2, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__2_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__2);
+v___x_41_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__1, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__1_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__1);
+v___x_42_ = lean_float_add(v___x_41_, v___x_40_);
+return v___x_42_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__4(void){
+_start:
+{
+double v___x_43_; double v___x_44_; double v___x_45_; 
+v___x_43_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__3, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__3_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__3);
+v___x_44_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha;
+v___x_45_ = lean_float_mul(v___x_44_, v___x_43_);
+return v___x_45_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__5(void){
+_start:
+{
+double v___x_46_; double v___x_47_; double v___x_48_; 
+v___x_46_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__4, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__4_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__4);
+v___x_47_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__0);
+v___x_48_ = lean_float_add(v___x_47_, v___x_46_);
+return v___x_48_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6(void){
+_start:
+{
+lean_object* v___x_49_; double v___x_50_; 
+v___x_49_ = lean_unsigned_to_nat(2u);
+v___x_50_ = lean_float_of_nat(v___x_49_);
+return v___x_50_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__7(void){
+_start:
+{
+double v___x_51_; double v___x_52_; double v___x_53_; 
+v___x_51_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6);
+v___x_52_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__5, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__5_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__5);
+v___x_53_ = pow(v___x_52_, v___x_51_);
+return v___x_53_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__8(void){
+_start:
+{
+lean_object* v___x_54_; uint8_t v___x_55_; lean_object* v___x_56_; double v___x_57_; 
+v___x_54_ = lean_unsigned_to_nat(1u);
+v___x_55_ = 1;
+v___x_56_ = lean_unsigned_to_nat(20u);
+v___x_57_ = l_Float_ofScientific(v___x_56_, v___x_55_, v___x_54_);
+return v___x_57_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__9(void){
+_start:
+{
+double v___x_58_; double v___x_59_; double v___x_60_; 
+v___x_58_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val;
+v___x_59_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__8, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__8_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__8);
+v___x_60_ = lean_float_mul(v___x_59_, v___x_58_);
+return v___x_60_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__10(void){
+_start:
+{
+double v___x_61_; double v___x_62_; double v___x_63_; 
+v___x_61_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val;
+v___x_62_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__9, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__9_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__9);
+v___x_63_ = lean_float_mul(v___x_62_, v___x_61_);
+return v___x_63_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__11(void){
+_start:
+{
+double v___x_64_; double v___x_65_; double v___x_66_; 
+v___x_64_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__10, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__10_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__10);
+v___x_65_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha;
+v___x_66_ = lean_float_mul(v___x_65_, v___x_64_);
+return v___x_66_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__12(void){
+_start:
+{
+double v___x_67_; double v___x_68_; double v___x_69_; 
+v___x_67_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6);
+v___x_68_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__11, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__11_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__11);
+v___x_69_ = pow(v___x_68_, v___x_67_);
+return v___x_69_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__13(void){
+_start:
+{
+double v___x_70_; double v___x_71_; double v___x_72_; 
+v___x_70_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__12, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__12_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__12);
+v___x_71_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__7, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__7_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__7);
+v___x_72_ = lean_float_sub(v___x_71_, v___x_70_);
+return v___x_72_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob(void){
+_start:
+{
+double v___x_73_; 
+v___x_73_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__13, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__13_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__13);
+return v___x_73_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__0(void){
+_start:
+{
+double v___x_74_; double v___x_75_; double v___x_76_; 
+v___x_74_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val;
+v___x_75_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val;
+v___x_76_ = lean_float_add(v___x_75_, v___x_74_);
+return v___x_76_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__1(void){
+_start:
+{
+double v___x_77_; double v___x_78_; double v___x_79_; 
+v___x_77_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__6);
+v___x_78_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__0);
+v___x_79_ = pow(v___x_78_, v___x_77_);
+return v___x_79_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__2(void){
+_start:
+{
+double v___x_80_; double v___x_81_; 
+v___x_80_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_eve__factor;
+v___x_81_ = lean_float_mul(v___x_80_, v___x_80_);
+return v___x_81_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__3(void){
+_start:
+{
+double v___x_82_; double v___x_83_; double v___x_84_; 
+v___x_82_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__2, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__2_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__2);
+v___x_83_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__1, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__1_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__1);
+v___x_84_ = lean_float_div(v___x_83_, v___x_82_);
+return v___x_84_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__4(void){
+_start:
+{
+double v___x_85_; double v___x_86_; double v___x_87_; 
+v___x_85_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__3, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__3_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__3);
+v___x_86_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha;
+v___x_87_ = lean_float_mul(v___x_86_, v___x_85_);
+return v___x_87_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__5(void){
+_start:
+{
+double v___x_88_; double v___x_89_; double v___x_90_; 
+v___x_88_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__4, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__4_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__4);
+v___x_89_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob___closed__0);
+v___x_90_ = lean_float_add(v___x_89_, v___x_88_);
+return v___x_90_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve(void){
+_start:
+{
+double v___x_91_; 
+v___x_91_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__5, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__5_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve___closed__5);
+return v___x_91_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__0(void){
+_start:
+{
+lean_object* v___x_92_; uint8_t v___x_93_; lean_object* v___x_94_; double v___x_95_; 
+v___x_92_ = lean_unsigned_to_nat(1u);
+v___x_93_ = 1;
+v___x_94_ = lean_unsigned_to_nat(5u);
+v___x_95_ = l_Float_ofScientific(v___x_94_, v___x_93_, v___x_92_);
+return v___x_95_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__1(void){
+_start:
+{
+double v___x_96_; double v___x_97_; 
+v___x_96_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob;
+v___x_97_ = log2(v___x_96_);
+return v___x_97_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__2(void){
+_start:
+{
+double v___x_98_; double v___x_99_; double v___x_100_; 
+v___x_98_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__1, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__1_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__1);
+v___x_99_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__0);
+v___x_100_ = lean_float_mul(v___x_99_, v___x_98_);
+return v___x_100_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob(void){
+_start:
+{
+double v___x_101_; 
+v___x_101_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__2, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__2_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__2);
+return v___x_101_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__0(void){
+_start:
+{
+double v___x_102_; double v___x_103_; 
+v___x_102_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve;
+v___x_103_ = log2(v___x_102_);
+return v___x_103_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__1(void){
+_start:
+{
+double v___x_104_; double v___x_105_; double v___x_106_; 
+v___x_104_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__0);
+v___x_105_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob___closed__0);
+v___x_106_ = lean_float_mul(v___x_105_, v___x_104_);
+return v___x_106_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve(void){
+_start:
+{
+double v___x_107_; 
+v___x_107_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__1, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__1_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve___closed__1);
+return v___x_107_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_secrecy__capacity___closed__0(void){
+_start:
+{
+double v___x_108_; double v___x_109_; double v___x_110_; 
+v___x_108_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve;
+v___x_109_ = lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob;
+v___x_110_ = lean_float_sub(v___x_109_, v___x_108_);
+return v___x_110_;
+}
+}
+static double _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_secrecy__capacity(void){
+_start:
+{
+double v___x_111_; 
+v___x_111_ = lean_float_once(&lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_secrecy__capacity___closed__0, &lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_secrecy__capacity___closed__0_once, _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_secrecy__capacity___closed__0);
+return v___x_111_;
+}
+}
+lean_object* initialize_Init(uint8_t builtin);
+lean_object* initialize_Init(uint8_t builtin);
+static bool _G_initialized = false;
+LEAN_EXPORT lean_object* initialize_MaxwellKey_MaxwellKeyPLUS_Examples_TwoParallelStripsComputable(uint8_t builtin) {
+lean_object * res;
+if (_G_initialized) return lean_io_result_mk_ok(lean_box(0));
+_G_initialized = true;
+res = initialize_Init(builtin);
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_Init(builtin);
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__self__val();
+lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_M__mutual__val();
+lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_Z_u2080__val = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_Z_u2080__val();
+lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_eve__factor = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_eve__factor();
+lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_N0__val = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_N0__val();
+lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_alpha();
+lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__bob();
+lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_arg__eve();
+lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__bob();
+lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_capacity__eve();
+lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_secrecy__capacity = _init_lp_MaxwellKey_MaxwellKey_TwoParallelStripsComputable_secrecy__capacity();
+return lean_io_result_mk_ok(lean_box(0));
+}
+#ifdef __cplusplus
+}
+#endif

@@ -1,14 +1,16 @@
--- This module serves as the root of the `MaxwellKey` library.
--- Import modules here that should be built as part of the library.
+-- Root of the `MaxwellKey` library.
+-- For PROOFS and CITATIONS, use MaxwellKeyPLUS (min_f_sq).
+-- The base MaxwellKey modules are legacy (f ≥ 3, conservative).
 import MaxwellKey.AdmittanceMatrix
 import MaxwellKey.ChannelMatrix
--- LEGACY (f ≥ 3): kept for backward compatibility; prefer DegradednessGeneral (min_f_sq)
-import MaxwellKey.Degradedness
--- LEGACY (f ≥ 3): kept for backward compatibility; prefer SecrecyCapacityGeneral (min_f_sq)
-import MaxwellKey.SecrecyCapacity
-import MaxwellKey.Examples.TwoParallelStrips
-import MaxwellKey.Tests.SanityChecks
+import MaxwellKey.LoewnerOrder
 
--- Generalized theorems (min_f_sq) — RECOMMENDED for new work
+-- Generalized theorems (min_f_sq) — USE THESE for new work and citations
 import MaxwellKeyPLUS.DegradednessGeneral
 import MaxwellKeyPLUS.SecrecyCapacityGeneral
+import MaxwellKeyPLUS.Assumptions
+import MaxwellKeyPLUS.VerifiedFirmware
+
+-- Examples and tests (use PLUS theorems)
+import MaxwellKey.Examples.TwoParallelStrips
+import MaxwellKey.Tests.SanityChecks

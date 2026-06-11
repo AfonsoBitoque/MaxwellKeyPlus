@@ -1,26 +1,18 @@
 /-
   MaxwellKey / Degradedness.lean
   ---------------------------------
-  [LEGADO / OBSOLETO]
+  ⚠️  DEPRECATED — DO NOT CITE IN PUBLICATIONS
 
   Este modulo contem a prova ORIGINAL de degradedness com o limiar
-  conservador f >= 3. Foi substituido por DegradednessGeneral.lean
-  (MaxwellKeyPLUS), que usa o limiar otimo min_f_sq.
+  CONSERVADOR f >= 3 (hardcoded). Foi SUBSTITUIDO por
+  DegradednessGeneral.lean (MaxwellKeyPLUS), que usa o limiar
+  OTIMO min_f_sq(M_self, M_mutual).
 
-  MANTIDO PARA RETROCOMPATIBILIDADE e como referencia historica.
-  Para novos trabalhos, usar DegradednessGeneral.lean.
+  Razao: f >= 3 e arbitrariamente conservador. min_f_sq e a
+  condicao EXATA derivada do modelo de admitancias.
 
-  Prova que o canal e "degraded" no sentido da ordem de Loewner:
-  a matriz de covariancia do sinal de Bob e maior ou igual a matriz
-  de covariancia do sinal de Eve (convertida para 2×2).
-
-  Modelo simplificado:
-  - S_bob = Z₀² • [[M_self²+M_mutual², 2·M_self·M_mutual],
-                   [2·M_self·M_mutual, M_self²+M_mutual²]]
-  - S_eve = Z₀² • (M_self+M_mutual)² / f²  (escalar, colocado em (0,0))
-
-  Sob acoplamento fraco |M_mutual| < |M_self|/2 e fator de distancia f >= 3,
-  provamos S_bob ≥ₗ S_eve_matrix.
+  MANTIDO APENAS PARA RETROCOMPATIBILIDADE.
+  Para novos trabalhos, CITAR SEMPRE DegradednessGeneral.lean.
 -/
 
 import Mathlib.Data.Matrix.Basic
