@@ -257,7 +257,6 @@ lemma S_bob_ge_S_eve (p : DegradednessParamsGeneral) :
             = (p.Z₀^2 * (p.M_self + p.M_mutual)^2 * (x 0)^2) / p.f^2 := by
     have h_ne : p.f ≠ 0 := by nlinarith [h_pos]
     field_simp [h_ne]
-    <;> ring
   have h_min := p.h_f_sq_ge_min
   have h_base := min_f_sq_bound p x
   have h_term : (p.M_self * x 0 + p.M_mutual * x 1)^2 + (p.M_mutual * x 0 + p.M_self * x 1)^2 ≥ 0 := by
