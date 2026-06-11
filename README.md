@@ -73,7 +73,7 @@ MaxwellKey/
 │   ├── LoewnerOrder.lean           # Loewner order for 2×2 real matrices
 │   ├── Degradedness.lean           # Original proof: f ≥ 3
 │   ├── SecrecyCapacity.lean        # Secrecy capacity positivity theorem
-│   ├── Extraction.lean             # Key generation protocol sketch
+│   ├── Draft/ExtractionSketch.lean # Key generation protocol sketch (draft)
 │   └── Examples/
 │       └── TwoParallelStrips.lean    # Example PCB geometry
 │
@@ -84,7 +84,7 @@ MaxwellKey/
 │   ├── ExactChannelHermitian.lean  # ECMT applied to physical Hermitian model
 │   ├── SecrecyCapacityGeneral.lean # Secrecy capacity with min_f_sq
 │   ├── VerifiedFirmware.lean       # Verified firmware (Float) + correctness proofs
-│   ├── VerifiedExtraction.lean     # Formal C semantics + equivalence proof
+│   ├── VerifiedExtraction.lean     # Formal C semantics specification (no equivalence proofs)
 │   ├── IEDP_sketch.md              # Informational Electromagnetic Duality Principle
 │   └── Examples/
 │       ├── TemplateRealParams.lean # Template for experimental parameters
@@ -157,7 +157,7 @@ Lean 4 (VerifiedFirmware.lean) -> lake build -> IR -> C -> gcc -> binary
 
 **Key files:**
 - `MaxwellKeyPLUS/VerifiedFirmware.lean` — Computable firmware + correctness proofs
-- `MaxwellKeyPLUS/VerifiedExtraction.lean` — Formal C semantics + equivalence proof skeleton
+- `MaxwellKeyPLUS/VerifiedExtraction.lean` — Formal C semantics specification (equivalence proofs not yet implemented)
 - `build/verified_main.c` — Minimal C wrapper calling exported Lean functions
 - `build/Makefile` — Automated build pipeline
 - `docs/VerifiedExtraction.md` — Full documentation

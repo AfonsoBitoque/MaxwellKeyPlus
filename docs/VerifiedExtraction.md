@@ -55,7 +55,7 @@ O Lean 4 compila funcoes puras (sem efeitos colaterais) para codigo nativo via u
 | Ficheiro | Proposito |
 |----------|-----------|
 | `MaxwellKeyPLUS/VerifiedFirmware.lean` | Funcoes computaveis em Float + provas de correção |
-| `MaxwellKeyPLUS/VerifiedExtraction.lean` | Semantica formal de C + prova de equivalencia |
+| `MaxwellKeyPLUS/VerifiedExtraction.lean` | Semantica formal de C (especificacao; provas de equivalencia nao implementadas) |
 | `build/verified_main.c` | Wrapper C que chama funcoes exportadas do Lean |
 | `build/Makefile` | Pipeline de build automatizado |
 
@@ -122,7 +122,7 @@ theorem preservation_of_strict_inequality
   h
 ```
 
-Embora trivial, este teorema formaliza o principio chave: se provamos uma desigualdade em Lean (Real), e a traducao C e semanticamente equivalente, entao o codigo C tambem satisfaz a desigualdade.
+Este teorema e um placeholder: o passo de que "a traducao C e semanticamente equivalente" NAO esta formalizado. O compilador Lean garante preservacao de semantica para funcoes puras, mas esta propriedade nao e provada no modulo VerifiedExtraction.lean.
 
 ### 4. Wrapper C (`verified_main.c`)
 
@@ -162,7 +162,7 @@ double C_sec = maxwellkey_secrecy_capacity();
 
 2. **Runtime Lean:** O codigo gerado pelo Lean depende do runtime Lean (lean_runtime.a). Para microcontroladores, seria necessario um runtime minimal ou cross-compilation.
 
-3. **Prova de equivalencia Float <-> Real:** A prova completa de que os calculos em Float preservam as propriedades matematicas para *todos* os parametros (nao apenas os concretos) requer teoria de erros de arredondamento IEEE 754, que nao esta disponivel no mathlib.
+3. **Limitacao: ausencia de prova de equivalencia Float <-> Real:** A prova completa de que os calculos em Float preservam as propriedades matematicas para *todos* os parametros (nao apenas os concretos) requer teoria de erros de arredondamento IEEE 754, que nao esta disponivel no mathlib. O VerifiedExtraction.lean e uma especificacao, nao uma verificacao completa.
 
 ### Trabalho Futuro
 

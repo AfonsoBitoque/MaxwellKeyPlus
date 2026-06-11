@@ -278,17 +278,17 @@ The build downloads mathlib4 (≈ 1 GB of dependencies) and compiles ~2000 Lean 
 | `LoewnerOrder.lean` | 75 | `loewner_le`, `refl`, `trans` |
 | `AdmittanceMatrix.lean` | 80 | `admittance_symmetric` |
 | `ChannelMatrix.lean` | 128 | `channel_bob_symmetric`, `eve_attenuation` |
-| `NoiseModel.lean` | 80 | `N0_pos`, `noise_cov_bob_nonneg` |
 | `Degradedness.lean` | 199 | `S_bob_ge_S_eve` (original, f ≥ 3) |
 | `SecrecyCapacity.lean` | 180 | `secrecy_capacity_pos` (**main theorem**) |
 | `DegradednessGeneral.lean` | 268 | `min_f_sq`, `S_bob_ge_S_eve` (generalized) |
 | `ExactChannel.lean` | 304 | `f_monotone_psd` (real matrices) |
 | `ExactChannelHermitian.lean` | 282 | `hermitian_to_real_form`, `exact_channel_applies_to_physics` |
-| `Assumptions.lean` | 82 | Formal hypotheses manifesto (5 of 7 hypotheses are formally proved; 2—linearity and unit input power—are satisfied by construction and marked as placeholders) |
-| `Extraction.lean` | 113 | Hybrid verification approach |
+| `Assumptions.lean` | 82 | Formal hypotheses manifesto (5 of 7 formally proved; 2 placeholders) |
 | `VerifiedFirmware.lean` | 258 | Float firmware with computational proofs |
-| `VerifiedExtraction.lean` | 228 | Semantic equivalence of Lean→C extraction |
-| **Total** | **~2377** | **~30 theorems/lemmas** |
+| `VerifiedExtraction.lean` | 191 | Formal C semantics specification (no equivalence proofs yet) |
+| `Draft/ExtractionSketch.lean` | 113 | Key generation protocol sketch (draft, not part of main library) |
+| `Draft/NoiseModelSketch.lean` | 120 | Thermal noise model sketch (draft, not integrated) |
+| **Total** | **~2297** | **~30 theorems/lemmas** |
 
 ### 8.3 Verification Statement
 
