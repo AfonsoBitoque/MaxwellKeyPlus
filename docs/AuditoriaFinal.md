@@ -1,23 +1,24 @@
 # Auditoria Final — MaxwellKey / MaxwellKeyPLUS
 
 **Data:** 10 Jun 2026 (4ª passagem, independente)  
-**Correções:** 11 Jun 2026  
+**Correções:** 11 Jun 2026 (problemas CRÍTICOS, ALTO, MÉDIO, BAIXO)  
+**Follow-up:** 11 Jun 2026 (2ª passagem)  
 **Auditor:** Rui (assistente virtual, auditoria adversarial)  
 **Mandato:** Procurar ativamente TODOS os erros, inconsistências, valores "mágicos", código inútil, hipóteses implícitas e más práticas antes de publicação ou demonstração experimental.
 
-> **NOTA DE CORREÇÃO (11 Jun 2026):** Os 4 problemas CRÍTICOS foram corrigidos. Ver secção "Problemas CRÍTICOS — Estado após correção" abaixo.
+> **NOTA DE CORREÇÃO (11 Jun 2026):** Os 4 problemas CRÍTICOS e 21 problemas ALTO/MÉDIO/BAIXO foram corrigidos. Ver secções "Problemas CRÍTICOS — Estado após correção" e "Auditoria de Follow-up" abaixo.
 
 ---
 
 ## Sumário Executivo
 
-| Gravidade | Contagem |
-|-----------|----------|
-| CRÍTICO   | 4        |
-| ALTO      | 9        |
-| MÉDIO     | 7        |
-| BAIXO     | 5        |
-| **Total** | **25**   |
+| Gravidade | Contagem (1ª passagem) | Follow-up |
+|-----------|------------------------|-----------|
+| CRÍTICO   | 4 (todos corrigidos)   | 0         |
+| ALTO      | 9 (todos corrigidos)   | 1         |
+| MÉDIO     | 7 (todos corrigidos)   | 4         |
+| BAIXO     | 5 (todos corrigidos)   | 3         |
+| **Total** | **25**                 | **8**     |
 
 **Veredicto global:** O projeto é matematicamente robusto no seu cerne — os teoremas principais estão corretos, o build passa (0 erros, 0 sorry), e a generalização para `min_f_sq` é válida. **No entanto**, existem **quatro problemas CRÍTICOS** que podem invalidar a narrativa científica ou introduzir vulnerabilidades no firmware:
 
@@ -462,6 +463,121 @@ lake build: 2002 jobs, 0 erros, 0 sorry, 0 admit, 0 axiom.
 
 ---
 
+## Auditoria de Follow-up (11 Jun 2026 — 2ª passagem)
+
+Após correção dos 4 problemas CRÍTICOS e 21 problemas ALTO/MÉDIO/BAIXO, efetuou-se uma segunda passagem independente sobre o código e documentação.
+
+**Build:** 2001 jobs, 0 erros, 0 sorry, 0 admit, 0 axiom. ✅
+
+---
+
+### AF-FU-01: SanityChecks.lean usa teorema LEGADO (f ≥ 3), não o generalizado
+
+- **Gravidade:** ALTO
+- **Certeza:** CONFIRMADO
+- **Ficheiros:** `MaxwellKey/Tests/SanityChecks.lean`
+- **Descrição:**
+  - `SanityChecks.lean` importa `MaxwellKey.Examples.TwoParallelStrips`.
+  - O teorema `args_positive` usa `arg_bob example_params` e `arg_eve example_params`.
+  - `example_params` em `TwoParallelStrips.lean` (linha 53) é uma instância de `SecrecyParams` (LEGADO, f ≥ 3).
+  - NÃO há nenhum teste para `SecrecyParamsGeneral` (generalizado, min_f_sq).
+  - O teorema `secrecy_positive` chama `secrecy_capacity_pos example_params` — versão legada.
+- **Impacto:** O "sanity check" só valida o teorema antigo. Se o teorema generalizado tivesse um bug, os sanity checks não o detetariam.
+- **Sugestão:** Adicionar sanity checks para `example_params_secrecy_general` (a instância generalizada já existe em `TwoParallelStrips.lean`).
+
+---
+
+### AF-FU-02: NoiseModel.lean — estrutura completa mas não integrada
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKey/NoiseModel.lean`
+- **Descrição:**
+  - Define `NoiseModel` que estende `ChannelModel` com `temperature` e `bandwidth`.
+  - Define `N0 (n : NoiseModel) := k_B * n.temperature * n.bandwidth`.
+  - Define `noise_cov_bob`, `noise_var_eve`, `N0_pos`.
+  - **Nunca é importado** pelos teoremas principais (`SecrecyCapacity.lean`, `SecrecyCapacityGeneral.lean`).
+  - Os exemplos (`TwoParallelStrips.lean`, `TemplateRealParams.lean`) usam `N0_val` hard-coded.
+  - A estrutura `NoiseModel` é "dead code" — bem documentada mas não ligada aos teoremas.
+- **Impacto:** Código inútil que aumenta a compilação e confunde leitores.
+- **Sugestão:** Ou integrar `NoiseModel` nos exemplos (usar `N0 = NoiseModel.N0` em vez de hard-coded), ou mover para `Draft/`.
+
+---
+
+### AF-FU-03: scalar_to_matrix definido mas não usado
+
+- **Gravidade:** BAIXO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKey/LoewnerOrder.lean` (linha 49)
+- **Descrição:** `scalar_to_matrix (h : ℂ)` converte um escalar complexo numa matriz 2×2 real. Não é referenciado em nenhum outro ficheiro.
+- **Sugestão:** Remover ou documentar que é para uso futuro.
+
+---
+
+### AF-FU-04: min_f_sq_gt_one — lema não usado
+
+- **Gravidade:** BAIXO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKeyPLUS/DegradednessGeneral.lean` (linhas 25–50)
+- **Descrição:** O próprio comentário admite: "Nao e usado atualmente nas provas principais, mas pode ser util para futuras extensoes".
+- **Sugestão:** Manter (é um lema matematicamente válido e pode ser útil), mas adicionar `@[deprecated]` ou mover para secção de lemas auxiliares.
+
+---
+
+### AF-FU-05: Nomenclatura M_mutual ambígua (Henry vs. adimensional)
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiros:** `MaxwellKey/AdmittanceMatrix.lean` (linhas 35–38), `MaxwellKeyPLUS/DegradednessGeneral.lean`
+- **Descrição:**
+  - Em `AdmittanceMatrix.lean`, `M_mutual` é a **indutância física** (unidade: Henry).
+  - Em `DegradednessGeneral.lean`, `M_mutual` é o **parâmetro normalizado** (adimensional, Z₀ · |Y_mutual|).
+  - O comentário no `AdmittanceMatrix.lean` já documenta isto, mas a ambiguidade persiste.
+  - O `simulate_circuit.py` tem `M_mutual_H` (Henry) e `M_mutual` (normalizado) — duas variáveis com nomes distintos.
+- **Impacto:** Um leitor que pule o comentário pode confundir as duas grandezas. Isto é particularmente perigoso porque as unidades são diferentes por ordens de grandeza.
+- **Sugestão:** Renomear `M_mutual` em `DegradednessGeneral.lean` para algo como `M_norm` ou `m_tilde` para distinguir claramente da indutância física.
+
+---
+
+### AF-FU-06: Ponte entre canal complexo (H_bob) e modelo real (S_bob)
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiros:** `MaxwellKey/ChannelMatrix.lean`, `MaxwellKeyPLUS/DegradednessGeneral.lean`, `MaxwellKeyPLUS/ExactChannelHermitian.lean`
+- **Descrição:**
+  - `ChannelMatrix.lean` define `H_bob` e `H_eve` como canais complexos.
+  - `DegradednessGeneral.lean` define `S_bob` e `S_eve_matrix` como matrizes reais (aproximação).
+  - A ponte formal entre estes dois mundos (H_bob → S_bob) só existe em `ExactChannelHermitian.lean`.
+  - No entanto, `ExactChannelHermitian.lean` prova que `H_bob · H_bob†` se reduz a uma matriz real, mas NÃO prova que esta matriz coincide com `S_bob` do modelo aproximado.
+- **Impacto:** Há um gap conceptual: o modelo aproximado (S_bob = Z₀² · [[...]]) não é formalmente derivado do modelo complexo (H_bob = Z₀ · Y).
+- **Sugestão:** Adicionar um lema que prove `S_bob = H_bob · H_bob†` (ou aproximação) para fechar a ponte.
+
+---
+
+### AF-FU-07: Proteção numérica ad-hoc no Python
+
+- **Gravidade:** BAIXO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `scripts/simulate_circuit.py` (linha 132)
+- **Descrição:** `denom = max((M_self**2 - M_mutual**2)**2, 1e-18)`. No Lean, a hipótese `|M_mutual| < |M_self|` garante que o denominador é estritamente positivo. Em Python, esta proteção é necessária para evitar divisão por zero, mas é um "magic number" (1e-18).
+- **Sugestão:** Documentar o porquê de 1e-18 (ou calcular o denominador de forma segura).
+
+---
+
+### AF-FU-08: VerifiedExtraction.lean — provas de equivalência ainda não existem
+
+- **Gravidade:** MÉDIO
+- **Certeza:** CONFIRMADO
+- **Ficheiro:** `MaxwellKeyPLUS/VerifiedExtraction.lean`
+- **Descrição:**
+  - Depois de remover ghost code, o módulo define semântica denotacional (`denote`) e traduções manuais (`alpha_c`, `arg_bob_c`, etc.).
+  - A secção 4 ("Prova de correção do compilador") tem um comentário sobre preservação de desigualdades, mas NÃO contém teoremas que provem equivalência.
+  - Os teoremas de correção foram removidos durante o desenvolvimento porque não compilavam com `Float`.
+- **Impacto:** O módulo promete "prova de equivalência semântica" mas não entrega. A "extracção verificada" é, de facto, apenas uma especificação.
+- **Sugestão:** Reduzir o scope do módulo: renomear secções e remover claims de provas que não existem.
+
+---
+
 ## Recomendações Prioritárias
 
 1. **Corrigir o paper** (AF-CRIT-02): Atualizar todas as secções desatualizadas, corrigir o URL, e adicionar uma nota sobre o gap do canal exato (AF-CRIT-01).
@@ -471,6 +587,16 @@ lake build: 2002 jobs, 0 erros, 0 sorry, 0 admit, 0 axiom.
 5. **Limpar código inútil** (AF-HIGH-05, AF-MED-01, AF-MED-04): Remover funções fantasma e placeholders não usados.
 6. **Atualizar SimulationGuide** (AF-HIGH-08): Adicionar aviso sobre G não ser usado no Lean.
 7. **Resolver inconsistência `typical_f`** (AF-HIGH-02, AF-MED-03): Documentar claramente que os valores "typical" são para testes formais, não para geometrias reais.
+
+### Recomendações Follow-up
+
+8. **SanityChecks generalizados** (AF-FU-01): Adicionar sanity checks para `SecrecyParamsGeneral` (min_f_sq), não apenas para `SecrecyParams` (f ≥ 3).
+9. **Integrar NoiseModel** (AF-FU-02): Ou ligar `NoiseModel` aos exemplos (calcular N0 a partir de T e B), ou mover para `Draft/`.
+10. **Limpar código morto** (AF-FU-03, AF-FU-04): Remover `scalar_to_matrix` (não usado) e documentar `min_f_sq_gt_one`.
+11. **Renomear M_mutual normalizado** (AF-FU-05): Usar `M_norm` ou `m_tilde` em `DegradednessGeneral.lean` para evitar confusão com a indutância física.
+12. **Fechar ponte H_bob → S_bob** (AF-FU-06): Adicionar lema que prove que `S_bob` do modelo aproximado coincide com `H_bob · H_bob†`.
+13. **Documentar proteção Python** (AF-FU-07): Explicar o magic number 1e-18 no `simulate_circuit.py`.
+14. **Reduzir scope de VerifiedExtraction** (AF-FU-08): Remover claims de "prova de correção" que não existem; o módulo é uma especificação, não uma verificação.
 
 ---
 
