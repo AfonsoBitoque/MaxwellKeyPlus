@@ -22,7 +22,6 @@
 
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Complex.Basic
-import MaxwellKey.SecrecyCapacity
 import MaxwellKeyPLUS.DegradednessGeneral
 import MaxwellKeyPLUS.SecrecyCapacityGeneral
 import MaxwellKeyPLUS.ExactChannel
@@ -31,13 +30,18 @@ namespace MaxwellKey
 
 namespace TemplateRealParams
 
-/-- Exemplo de valores de TESTE para duas faixas paralelas em PCB
-    (FR4, epsilon_r ~ 4.3, h = 1.6 mm, w = 0.5 mm, s = 1 mm, L = 10 mm).
+/-- Exemplo de valores de TESTE FORMAL — NAO representam uma geometria fisica real.
 
-    ATENCAO: Estes valores (M_self=0.6, M_mutual=0.15) representam o
-    PIOR CASO de acoplamento (racio M_mutual/M_self = 0.25, exatamente
-    metade do limite maximo permitido por weak_coupling). Foram escolhidos
-    como fracoes simples (6/10, 15/100) para facilitar as provas norm_num.
+    ATENCAO CRITICA: Estes valores (M_self=0.6, M_mutual=0.15) sao
+    escolhidos PURAMENTE para facilitar provas automaticas (norm_num).
+    Nao correspondem a nenhuma PCB real. Nao devem ser usados numa
+    demonstracao experimental sem substituicao por valores medidos.
+
+    - M_self=0.6, M_mutual=0.15: racio 0.25 = metade do limite de
+      weak_coupling. E o PIOR CASO que ainda passa no teorema.
+    - typical_f=3: valor conservador que satisfaz f^2 >= min_f_sq (~1.5).
+      Num sistema real, f seria calculado a partir da geometria via
+      compute_eve_distance_factor (ex: ~108 para ratio=3).
 
     Valores fisicos realistas tem acoplamento muito mais fraco:
     - Fallback simulator: M_self=0.21, M_mutual=0.022 (racio ~0.10)
@@ -157,9 +161,14 @@ def create_params_exact (M_self M_mutual Z₀ f : ℝ)
     logo f ≈ |M_self / M_mutual| · (d_eve / d_bob)³.
 
     Para d_eve / d_bob = 3: f ≈ (0.6/0.15) · 27 = 4 · 27 = 108.
-    Este valor depende dos parâmetros normalizados M_self/M_mutual
-    e da razão de distâncias. O valor f = 3 nos exemplos "typical"
-    é um exemplo de teste que satisfaz f^2 >= min_f_sq (~1.5).
+
+    INCONSISTENCIA INTENCIONAL (documentada):
+    - compute_eve_distance_factor calcula f ≈ 108 para os typical values.
+    - typical_f = 3 é um valor ARBITRARIO escolhido apenas para passar
+      a prova formal (f^2 = 9 >= min_f_sq ~ 1.5).
+    - Estes dois valores NAO sao consistentes entre si.
+    - Num workflow real, typical_f seria substituido pelo valor calculado
+      a partir da geometria fisica.
 -/
 noncomputable def compute_eve_distance_factor (M_self M_mutual distance_ratio : ℝ) : ℝ :=
   |M_self / M_mutual| * distance_ratio^3

@@ -1,5 +1,11 @@
 # Guia de Simulação Eletromagnética para o MaxwellKey
 
+> **AVISO IMPORTANTE:** O modelo Lean atual assume **G = 0** (sem pernas dielétricas).
+> A condutância `G` é calculada neste guia para referência completa, mas **NÃO é
+> usada nas provas formais**. No regime quase-estático a 100 MHz, as pernas no
+> FR-4 (tan δ ≈ 0.02) são desprezáveis face ao acoplamento capacitivo/indutivo.
+> A inclusão de G no modelo é trabalho futuro. Ver `MaxwellKeyPLUS/Assumptions.lean`.
+
 ## 1. Objetivo
 
 Este guia descreve os passos necessários para extrair os parâmetros físicos do acoplamento eletromagnético entre pistas de cobre numa PCB, usando simulações por elementos finitos (COMSOL Multiphysics) ou métodos de diferenças finitas no domínio do tempo (OpenEMS). Os parâmetros extraídos alimentam a verificação formal em Lean 4 do protocolo MaxwellKey.
@@ -9,7 +15,7 @@ Este guia descreve os passos necessários para extrair os parâmetros físicos d
 - `L_self` — Indutância própria (H)
 - `C_mutual` — Capacidade mútua (F)
 - `M_mutual` — Indutância mútua (H)
-- `G` — Condutância de perdas no dielétrico (S)
+- `G` — Condutância de pernas no dielétrico (S) — **calculado para referência; não usado no Lean**
 - `f_att` — Fator de atenuação para a posição do espião
 
 ---

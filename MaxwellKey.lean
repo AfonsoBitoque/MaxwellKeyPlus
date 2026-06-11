@@ -5,7 +5,6 @@ import MaxwellKey.ChannelMatrix
 import MaxwellKey.NoiseModel
 import MaxwellKey.Degradedness
 import MaxwellKey.SecrecyCapacity
-import MaxwellKey.Extraction
 import MaxwellKey.Examples.TwoParallelStrips
 import MaxwellKey.Tests.SanityChecks
 

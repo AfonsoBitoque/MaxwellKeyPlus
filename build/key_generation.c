@@ -232,7 +232,7 @@ int main(void) {
     /* Geracao de chave */
     uint8_t key[NUM_BITS];
     generate_key_bob(key, NUM_BITS);
-    printf("Chave gerada (%zu bits): ", NUM_BITS);
+    printf("Chave gerada (%d bits): ", NUM_BITS);
     for (size_t i = 0; i < NUM_BITS; i++) {
         printf("%d", key[i]);
     }

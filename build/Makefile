@@ -2,22 +2,20 @@
 # ------------------------------
 # Pipeline de extracao verificada: Lean 4 -> IR -> C -> binario.
 #
-# Este Makefile automatiza a compilacao do firmware verificado
-# a partir das definicoes Lean em VerifiedFirmware.lean.
+# STATUS: O alvo 'reference' (firmware C manual) funciona.
+# O alvo 'verified' (extracao automatica Lean -> C) E UM ESQUELETO.
+# O Lean 4 requer configuracao adicional no lakefile para gerar
+# bibliotecas estaticas/partilhadas para FFI externo. Ver
+# docs/VerifiedExtraction.md para a abordagem recomendada.
 #
-# Pipeline:
+# Pipeline pretendido:
 #   1. lake build           -- compila MaxwellKeyPLUS para codigo nativo
-#   2. lake env lean --sharedlib  -- gera biblioteca partilhada com funcoes exportadas
-#   3. gcc                  -- compila o wrapper C e linka com a biblioteca Lean
-#
-# Resultado: binario 'maxwellkey_verified' que implementa as funcoes
-# de firmware provadas formalmente em Lean 4.
+#   2. gcc                  -- compila o wrapper C e linka com a biblioteca Lean
 #
 # NOTA: O Lean 4 gera codigo nativo via C como representacao intermedia.
 # O compilador Lean e verificado para preservar a semantica de funcoes puras.
-# Logo, o binario resultante e semanticamente equivalente as provas formais.
 
-.PHONY: all clean verified
+.PHONY: all clean reference help
 
 LEAN := lake env lean
 LAKE := lake
@@ -28,35 +26,23 @@ CFLAGS := -O2 -Wall -fPIC
 BUILD_DIR := .lake/build
 LIB_DIR := $(BUILD_DIR)/lib
 
-all: verified
+all: reference
 
-# --- Alvo principal: firmware verificado ---
-verified: maxwellkey_verified
-
-# Compila o projeto Lean (inclui VerifiedFirmware.lean com @[export])
-$(BUILD_DIR)/libMaxwellKeyPLUS.a:
-	@echo "[LEAN] A compilar MaxwellKeyPLUS..."
-	$(LAKE) build
-
-# Gera biblioteca partilhada com as funcoes exportadas
-$(LIB_DIR)/libleanmaxwellkey.so: $(BUILD_DIR)/libMaxwellKeyPLUS.a
-	@echo "[LEAN] A gerar biblioteca partilhada..."
-	mkdir -p $(LIB_DIR)
-	# O Lean 4 nao suporta geracao directa de .so para FFI externo.
-	# O workflow recomendado e usar lake build para gerar o binario completo.
-	@echo "[INFO] Ver docs/VerifiedExtraction.md para instrucoes detalhadas."
-
-# Compila o wrapper C com as funcoes exportadas do Lean
-maxwellkey_verified: verified_main.c $(BUILD_DIR)/libMaxwellKeyPLUS.a
-	@echo "[C] A compilar wrapper C..."
-	$(CC) $(CFLAGS) -o $@ $< \
-		-L $(BUILD_DIR) -lMaxwellKeyPLUS \
-		$(shell $(LEAN) --print-cflags) \
-		$(shell $(LEAN) --print-ldflags) \
-		-lm
-	@echo "[OK] Firmware verificado gerado: $@"
+# --- Alvo principal: firmware verificado (ESQUELETO) ---
+# O Lean 4 nao gera .a/.so automaticamente para FFI sem lakefile custom.
+# O workflow e usar 'lake build' directamente, que compila todo o projeto
+# incluindo VerifiedFirmware.lean com @[export].
+# Para chamar funcoes Lean de C, ver docs/VerifiedExtraction.md.
+verified: verified_main.c
+	@echo "[INFO] Alvo 'verified' e um esqueleto."
+	@echo "[INFO] O Lean 4 nao suporta extracao directa de .a/.so"
+	@echo "       para FFI externo sem configuracao do lakefile."
+	@echo "[INFO] Ver docs/VerifiedExtraction.md para instrucoes."
+	@false
 
 # --- Firmware de referencia (traducao manual) ---
+# Este alvo FUNCIONA e gera um binario executavel.
+# E uma simulacao didatica, NAO e seguro para producao.
 reference: key_generation.c
 	@echo "[C] A compilar firmware de referencia..."
 	$(CC) $(CFLAGS) -o keygen $< -lm
@@ -73,15 +59,15 @@ help:
 	@echo "MaxwellKey — Makefile de Extracao Verificada"
 	@echo ""
 	@echo "Alvos:"
-	@echo "  make verified   — Firmware verificado (Lean -> C -> binario)"
-	@echo "  make reference  — Firmware de referencia (C manual)"
-	@echo "  make clean    — Limpar artefactos"
+	@echo "  make reference  — Firmware de referencia (C manual) — FUNCIONA"
+	@echo "  make verified   — Firmware verificado (Lean -> C) — ESQUELETO"
+	@echo "  make clean      — Limpar artefactos"
 	@echo ""
 	@echo "Requisitos:"
 	@echo "  - Lean 4 (v4.30.0+)"
 	@echo "  - lake (incluido com Lean)"
 	@echo "  - gcc"
 	@echo ""
-	@echo "NOTA: O alvo 'verified' e um esqueleto. O Lean 4 nao suporta"
-	@echo "extracao directa de .o/.a para FFI externo sem o lakefile"
-	@echo "configurado. Ver docs/VerifiedExtraction.md para detalhes."
+	@echo "NOTA: O alvo 'verified' requer configuracao adicional do lakefile"
+	@echo "para exportar funcoes Lean como biblioteca estatica. Ver"
+	@echo "docs/VerifiedExtraction.md para a abordagem recomendada."

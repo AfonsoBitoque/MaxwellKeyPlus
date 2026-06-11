@@ -284,7 +284,7 @@ The build downloads mathlib4 (≈ 1 GB of dependencies) and compiles ~2000 Lean 
 | `DegradednessGeneral.lean` | 268 | `min_f_sq`, `S_bob_ge_S_eve` (generalized) |
 | `ExactChannel.lean` | 304 | `f_monotone_psd` (real matrices) |
 | `ExactChannelHermitian.lean` | 282 | `hermitian_to_real_form`, `exact_channel_applies_to_physics` |
-| `Assumptions.lean` | 82 | Formal hypotheses manifesto |
+| `Assumptions.lean` | 82 | Formal hypotheses manifesto (5 of 7 hypotheses are formally proved; 2—linearity and unit input power—are satisfied by construction and marked as placeholders) |
 | `Extraction.lean` | 113 | Hybrid verification approach |
 | `VerifiedFirmware.lean` | 258 | Float firmware with computational proofs |
 | `VerifiedExtraction.lean` | 228 | Semantic equivalence of Lean→C extraction |

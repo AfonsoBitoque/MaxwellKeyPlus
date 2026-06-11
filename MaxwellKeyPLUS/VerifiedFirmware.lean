@@ -37,15 +37,24 @@ namespace VerifiedFirmware
    1. CONSTANTES DO FIRMWARE (Float, IEEE 754)
    ===================================================================== -/
 
-/-- Constante de Boltzmann como Float. -/
+/-- Constante de Boltzmann como Float (J/K). -/
 def k_B_float : Float := 1.380649e-23
+
+/-- Temperatura de referencia (K). -/
+def T_float : Float := 290.0
+
+/-- Largura de banda (Hz). -/
+def B_float : Float := 1.0e6
 
 /-- Parametros do exemplo TwoParallelStrips em Float. -/
 def M_self_val_f  : Float := 0.003109761664971414
 def M_mutual_val_f : Float := 0.000004150620831811415
 def Z₀_val_f      : Float := 50.0
 def eve_factor_f  : Float := 5.0
-def N0_val_f      : Float := 4.0038821e-15
+
+/-- Densidade espectral de ruido N0 = k_B * T * B (W/Hz).
+    Calculado a partir das constantes fisicas para consistencia. -/
+def N0_val_f : Float := k_B_float * T_float * B_float
 
 /- =====================================================================
    2. OPERACOES COMPUTAVEIS (Float)
@@ -56,7 +65,15 @@ def alpha_float : Float :=
   Z₀_val_f * Z₀_val_f / N0_val_f
 
 /-- Argumento de Bob em Float.
-    arg_bob = (1 + alpha*(M_self^2 + M_mutual^2))^2 - (alpha*2*M_self*M_mutual)^2 -/
+    arg_bob = (1 + alpha*(M_self^2 + M_mutual^2))^2 - (alpha*2*M_self*M_mutual)^2
+
+    NOTA NUMERICA (risco de cancelamento):
+    alpha ~ 6.24e17, M_self^2 ~ 9.67e-6, logo alpha*M_self^2 ~ 6e12.
+    arg_bob = (6e12)^2 - (algo)^2. Em Float64 (53 bits ~ 16 digitos),
+    subtrair dois numeros muito proximos pode perder precisao.
+    Para os parametros concretos deste exemplo, native_decide confirma
+    que a desigualdade estrita e preservada. Para outros parametros,
+    e recomendavel usar Float.log1p ou reformular o calculo. -/
 def arg_bob_float : Float :=
   let a := 1.0 + alpha_float * (M_self_val_f * M_self_val_f + M_mutual_val_f * M_mutual_val_f)
   let b := alpha_float * (2.0 * M_self_val_f * M_mutual_val_f)

@@ -98,22 +98,6 @@ def denote (env : Env) : CExpr → Float
    3. COMPILADOR LEAN -> C
    ===================================================================== -/
 
-/-- Traducao de expressoes Lean (Float) para C.
-    Esta e uma funcao meta (nao computavel) que descreve como
-    uma expressao Lean seria traduzida para C.
-
-    Na pratica, o compilador Lean 4 faz isto automaticamente
-    ao gerar codigo nativo (via C como IR). Aqui formalizamos
-    o processo para um subconjunto. -/
-def lean_to_c : Lean.Expr → Option CExpr
-  -- Literais Float
-  | Lean.Expr.app (Lean.Expr.const `Float.ofScientific _) _ =>
-      -- Simplificado: nao conseguimos extrair o valor literal
-      -- de uma Lean.Expr sem meta-programacao.
-      -- Na pratica, o compilador Lean faz isto corretamente.
-      none
-  | _ => none
-
 /- Como a traducao Lean.Expr -> CExpr requer meta-programacao,
    definimos uma versao manual para expressoes concretas.
    Cada funcao do firmware e traduzida para uma CExpr equivalente. -/
@@ -216,11 +200,6 @@ def firmware_env : Env := fun _ => 0.0  -- placeholder; valores reais injetados
 
    O ficheiro build/Makefile automatiza este pipeline.
 -/
-
-/- Documentacao do pipeline de extracao.
-   Ver build/Makefile para a implementacao. -/
-def extraction_pipeline : String :=
-  "Lean 4 (.lean) -> lake build -> IR (.olean) -> C (.c) -> gcc -> binario"
 
 end VerifiedExtraction
 

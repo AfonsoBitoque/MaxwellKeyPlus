@@ -9,9 +9,6 @@ namespace MaxwellKey
 
 namespace TwoParallelStripsComputable
 
-/-- Constante de Boltzmann como Float. -/
-def k_B : Float := 1.380649e-23
-
 /-- Valores físicos pré-calculados como Float. -/
 def M_self_val : Float := 0.003109761664971414
 def M_mutual_val : Float := 0.000004150620831811415

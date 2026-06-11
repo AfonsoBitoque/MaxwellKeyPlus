@@ -1,32 +1,18 @@
 /-
-  MaxwellKey / Extraction.lean
-  --------------------------
-  Esboco do protocolo de geracao de chave e ponte para extracao de codigo.
+  MaxwellKey / Draft / ExtractionSketch.lean
+  -------------------------------------------
+  ESBOCO do protocolo de geracao de chave e ponte para extracao de codigo.
+
+  STATUS: Este ficheiro e um esboco/placeholder. Nao faz parte da
+  biblioteca principal (nao e importado pelo modulo raiz).
+  Mantido aqui para referencia historica.
 
   ABORDAGEM HIBRIDA (Pedro, 10 Jun 2026):
   A prova formal em Lean 4 cobre a propriedade fundamental: C_s > 0
-  (teorema secrecy_capacity_pos). Isto garante que existe um protocolo
-  de geracao de chave com taxa de segredo nao nula.
-
-  A analise de desempenho (probabilidade de erro de bit, taxa de segredo
-  alcancavel, otimalidade do protocolo de quantizacao) e feita
-  informalmente no artigo, usando teoria da informacao standard
-  (Csiszar-Korner, Wyner). Nao e necessario formalizar estes resultados
-  em Lean 4 para a contribuicao principal do projeto.
-
-  O protocolo deterministico abaixo e uma especificacao ideal.
-  A versao probabilistica completa requereria MeasureTheory e
-  ProbabilityTheory em Lean 4, o que e trabalho futuro.
-
-  O protocolo real (a implementar em C/Rust):
-  1. Alice e Bob ligam o gerador a uma tensao de teste conhecida (ex: 1 V).
-  2. Medem a resposta do canal (corrente/tensao em cada porta).
-  3. Quantizam cada medicao num bit (fase positiva -> 1, negativa -> 0).
-  4. Repetem N vezes para obter uma chave de N bits.
-  5. Usam correcao de erros (codigos LDPC/polar) para reconciliar chaves.
-
-  O teorema `degradedness_loewner` garante que a capacidade de segredo e
-  estritamente positiva, logo o protocolo e teoricamente seguro.
+  (teorema secrecy_capacity_pos). A analise de desempenho e feita
+  informalmente no artigo. O protocolo deterministico abaixo e uma
+  especificacao ideal. A versao probabilistica completa requereria
+  MeasureTheory e ProbabilityTheory em Lean 4 (trabalho futuro).
 -/
 
 import Mathlib.Data.Real.Basic

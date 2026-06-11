@@ -56,7 +56,7 @@ python3 scripts/simulate_circuit.py
 
 ### Use COMSOL/OpenEMS Parameters
 
-1. Follow [`docs/SimulationGuide.md`](docs/SimulationGuide.md) to extract `C_self`, `L_self`, `C_mutual`, `M_mutual`, `G`, `f_att`.
+1. Follow [`docs/SimulationGuide.md`](docs/SimulationGuide.md) to extract `C_self`, `L_self`, `C_mutual`, `M_mutual`, `G` (for reference only; Lean assumes G = 0), `f_att`.
 2. Fill in `scripts/params.json` with your measured values.
 3. Open `MaxwellKeyPLUS/Examples/TemplateRealParams.lean` and paste the numeric values.
 4. Run `lake build` to verify all physical hypotheses are satisfied.
@@ -229,6 +229,8 @@ See `docs/VerifiedExtraction.md` for comparison with HACL*, Everest, CompCert, a
 
 2. **Reference firmware is a simulation.** `build/key_generation.c` is an **educational simulation**, not production firmware. It uses `rand()` without a hardware TRNG and mixes parameters from different geometries. For production, use `build/verified_main.c` with the Lean-verified extraction pipeline.
 
+3. **Eve channel representation.** The eavesdropper's channel is physically a scalar SISO channel (`H_eve`), but in the degradedness proof it is represented as a 2×2 matrix `S_eve_matrix` with the scalar at position (0,0) and zeros elsewhere. This is a notational convention to make the Loewner order (defined for 2×2 matrices) applicable. The proof remains valid because the quadratic form `xᵀ S_eve_matrix x` equals the scalar channel response times `x₀²`.
+
 ---
 
 ## Citation
@@ -247,6 +249,17 @@ See `docs/VerifiedExtraction.md` for comparison with HACL*, Everest, CompCert, a
 ## License
 
 MIT License — See repository for full text.
+
+## Project Conventions
+
+- **Language:** Source code comments and internal documentation are in **Portuguese** (PT-PT). External-facing documentation (`README.md`, `paper/`) is in **English** for accessibility.
+- **Nomenclature:**
+  - `M_self`, `M_mutual` — normalized coupling parameters (dimensionless)
+  - `Z₀` — termination impedance (Ω)
+  - `f_att` — distance attenuation factor (dimensionless, > 1)
+  - `N0` — noise spectral density (W/Hz)
+  - `S_bob`, `S_eve` — signal covariance matrices
+  - `H_bob`, `H_eve` — channel matrices
 
 ## Acknowledgments
 

@@ -146,9 +146,7 @@ lemma H_bob_H_bob_dagger_eq_real (c : ChannelModel) :
   ext i j
   fin_cases i <;> fin_cases j <;> (
     simp [Z0_real_matrix, B_matrix, Matrix.smul_apply, Matrix.map_apply, Matrix.mul_apply,
-          Matrix.conjTranspose_apply, Fin.sum_univ_two, conj_I,
-          Complex.I_re, Complex.I_im, Complex.ofReal_re, Complex.ofReal_im,
-          Complex.mul_re, Complex.mul_im, Complex.add_re, Complex.add_im]
+          Matrix.conjTranspose_apply, Fin.sum_univ_two, conj_I]
     ring_nf
     norm_num
     try ring
