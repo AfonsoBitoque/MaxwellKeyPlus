@@ -1,17 +1,19 @@
 /* MaxwellKey / build / key_generation.c
  * --------------------------------------
- * Firmware de referencia para geracao de chave.
+ * Firmware de REFERENCIA para DEMONSTRACAO SIMULADA.
  *
- * AVISO: Este ficheiro e uma TRADUCAO MANUAL das operacoes
- * provadas formalmente em Lean 4. NAO foi extraido automaticamente
- * por compilador. O codigo C traduz as formulas matematicas
- * verificadas em MaxwellKey/SecrecyCapacity.lean e
- * MaxwellKeyPLUS/DegradednessGeneral.lean.
+ * AVISO CRITICO: Este ficheiro e uma SIMULACAO didatica. NAO e
+ * seguro para producao. Em particular:
+ *   1. Usa rand() sem entropia real (previsivel).
+ *   2. Os bits sao gerados por um PRNG simples, nao por medicao
+ *      fisica do canal.
+ *   3. E uma traducao MANUAL das formulas matematicas verificadas
+ *      em Lean 4 (nao extraida automaticamente por compilador).
  *
- * Para o firmware VERIFICADO (extraido automaticamente do Lean 4),
- * ver MaxwellKeyPLUS/VerifiedFirmware.lean e build/verified_main.c.
- * O pipeline verificado evita a traducao manual e garante
- * equivalencia semantica entre as provas e o codigo executavel.
+ * Para um firmware de producao, usar:
+ *   - MaxwellKeyPLUS/VerifiedFirmware.lean (especificacao verificada)
+ *   - build/verified_main.c (extracao automatica Lean -> C)
+ *   - TRNG (True Random Number Generator) de hardware para bits.
  *
  * O firmware real do David deve implementar estas operacoes
  * em hardware (MCU/FPGA) e usar os mesmos parametros que o
@@ -26,6 +28,7 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <time.h>
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * Constantes fisicas e parametros do canal
@@ -39,17 +42,14 @@
 #define F_MHZ        100.0    /* Frequencia de operacao */
 #define NUM_BITS     128      /* Comprimento da chave */
 
-/* Parametros normalizados (exemplo do fallback simulator).
-   NOTA: Estes valores vêm de scripts/simulate_circuit.py (output para
-   scripts/params.json). Sao DIFERENTES dos valores em TwoParallelStrips.lean
-   (M_self=0.0031, M_mutual=4.15e-6) e dos valores "typical" de teste
-   (M_self=0.6, M_mutual=0.15). Cada conjunto serve para um proposito
-   diferente; o teorema e robusto para qualquer geometria que satisfaca
-   weak_coupling (|M_mutual| < |M_self|/2). */
-static const double M_SELF    = 0.2098811678;
-static const double M_MUTUAL  = 0.0215134645;
-static const double F_ATT     = 263.4067;
-static const double G_COND    = 8.3952e-05;
+/* Parametros normalizados da geometria TwoParallelStrips (PCB fina).
+   Sincronizados com VerifiedFirmware.lean e TwoParallelStrips.lean.
+   Estes valores representam uma geometria fisica especifica de PCB
+   (pistas paralelas, w=1mm, s=2mm, l=100mm, FR-4). */
+static const double M_SELF    = 0.003109761664971414;
+static const double M_MUTUAL  = 0.000004150620831811415;
+static const double F_ATT     = 5.0;
+static const double G_COND    = 0.0;  /* Modelo Lean assume G = 0 */
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * Estruturas de dados
@@ -177,8 +177,13 @@ void generate_key_bob(uint8_t *key, size_t num_bits) {
  * ───────────────────────────────────────────────────────────────────────────── */
 
 int main(void) {
+    /* Inicializar PRNG com tempo atual. NOTA: ainda fraco para producao;
+       firmware real deve usar TRNG de hardware. */
+    srand((unsigned int)time(NULL));
+
     printf("=====================================================\n");
     printf("  MaxwellKey — Firmware de Referencia (C)\n");
+    printf("  AVISO: SIMULACAO DIDATICA — Nao segura para producao\n");
     printf("=====================================================\n\n");
 
     /* Parametros do canal */
@@ -228,14 +233,14 @@ int main(void) {
     uint8_t key[NUM_BITS];
     generate_key_bob(key, NUM_BITS);
     printf("Chave gerada (%zu bits): ", NUM_BITS);
-    for (size_t i = 0; i < 16; i++) {
+    for (size_t i = 0; i < NUM_BITS; i++) {
         printf("%d", key[i]);
     }
-    printf("...\n\n");
+    printf("\n\n");
 
     printf("=====================================================\n");
-    printf("  Firmware pronto para deployment no hardware.\n");
-    printf("  Proximos passos: ADC + interface de radio.\n");
+    printf("  Simulacao concluida.\n");
+    printf("  Para producao: usar verified_main.c + TRNG de hardware.\n");
     printf("=====================================================\n");
 
     return 0;

@@ -22,7 +22,7 @@ The central challenge in PLKG is proving that the legitimate channel *dominates*
 **Our contributions:**
 1. We formalize the physical-layer security of electromagnetic near-field coupling in Lean 4, providing the first machine-checked proof of a PLKG protocol.
 2. We derive the exact degradation threshold `min_f_sq(M_self, M_mutual)` and prove it is optimal (tight).
-3. We prove (for real symmetric matrices) that the exact channel transformation `f(A) = I - (I+A)⁻¹` is monotone with respect to the Loewner order. Extension to complex Hermitian matrices is future work.
+3. We prove monotonicity of the exact channel transformation `f(A) = I - (I+A)⁻¹` with respect to the Loewner order for real symmetric matrices, and close the gap to the physical model by proving that the Hermitian covariance matrix `H_bob H_bob†` reduces exactly to a real symmetric matrix under the MaxwellKey physical hypotheses (purely imaginary admittance, real termination impedance).
 4. We provide an experimental pipeline from COMSOL/OpenEMS simulation to Lean verification, enabling reproducible validation.
 
 ---
@@ -84,7 +84,7 @@ It proves reflexivity and transitivity, essential for composing proofs.
 
 **Layer 3 — Capacity:** `SecrecyCapacity.lean` proves positivity of the secrecy capacity.
 
-**Layer 4 — Exact Channel (preliminary):** `ExactChannel.lean` proves monotonicity of the exact channel transformation for real symmetric matrices. This module is not used in the main security theorems.
+**Layer 4 — Exact Channel:** `ExactChannel.lean` and `ExactChannelHermitian.lean` prove monotonicity of the exact channel transformation `f(A) = I - (I+A)⁻¹` for real symmetric matrices, and show that the physical Hermitian covariance matrix `H_bob H_bob†` reduces exactly to this real form. These theorems bridge the approximate model with the exact physical channel.
 
 ---
 
@@ -172,6 +172,8 @@ where:
 **Theorem 5 (exact_channel_applies_to_physics).** Under the Loewner order hypothesis `S_bob ⪰ S_eve_sym`, the exact channel transformation preserves the order: `f(S_bob) ⪰ f(S_eve_sym)`. The PSD conditions are automatically satisfied because `a±b` are perfect squares.
 
 These theorems bridge the approximate model with the exact physical channel, strengthening the security guarantee to the exact channel transformation.
+
+**Known limitation.** Theorem 5 requires the stronger hypothesis `S_bob ⪰ S_eve_sym`, where `S_eve_sym` is a diagonal matrix with the Eve scalar on both entries. The main degradedness theorem (Theorem 2) only proves `S_bob ⪰ S_eve_matrix`, where `S_eve_matrix` has the scalar only at position (0,0). Because `S_eve_sym ⪰ S_eve_matrix`, the condition for the exact channel is stricter than `f² ≥ min_f_sq`. The optimal threshold for the exact channel would be larger than `min_f_sq`; deriving and proving this tighter bound is future work. In practice, the approximate model (`S_eve_matrix`) is sufficient for the secrecy capacity proof.
 
 ---
 
@@ -262,12 +264,12 @@ This paper is accompanied by a reproducible artifact: the MaxwellKey Lean 4 libr
 ### 8.1 Building the Artifact
 
 ```bash
-git clone https://github.com/predm/MaxwellKey.git
+git clone https://github.com/AfonsoBitoque/MaxwellKeyPlus.git
 cd MaxwellKey
 lake build
 ```
 
-The build downloads mathlib4 (≈ 1 GB of dependencies) and compiles ~4000 Lean jobs. Expected build time: 2–5 minutes on a modern laptop.
+The build downloads mathlib4 (≈ 1 GB of dependencies) and compiles ~2000 Lean jobs. Expected build time: 2–5 minutes on a modern laptop.
 
 ### 8.2 Navigating the Proofs
 
@@ -284,7 +286,9 @@ The build downloads mathlib4 (≈ 1 GB of dependencies) and compiles ~4000 Lean 
 | `ExactChannelHermitian.lean` | 282 | `hermitian_to_real_form`, `exact_channel_applies_to_physics` |
 | `Assumptions.lean` | 82 | Formal hypotheses manifesto |
 | `Extraction.lean` | 113 | Hybrid verification approach |
-| **Total** | **~1891** | **~25 theorems/lemmas** |
+| `VerifiedFirmware.lean` | 258 | Float firmware with computational proofs |
+| `VerifiedExtraction.lean` | 228 | Semantic equivalence of Lean→C extraction |
+| **Total** | **~2377** | **~30 theorems/lemmas** |
 
 ### 8.3 Verification Statement
 

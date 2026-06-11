@@ -38,14 +38,14 @@ Physical-layer key generation leverages the reciprocal nature of electromagnetic
 
 ```bash
 # Clone the repository
-git clone https://github.com/predm/MaxwellKey.git
+git clone https://github.com/AfonsoBitoque/MaxwellKeyPlus.git
 cd MaxwellKey
 
 # Download mathlib dependencies and build everything
 lake build
 ```
 
-The build compiles ~4000 Lean jobs and should complete without errors in ~2 minutes on a modern machine.
+The build compiles ~2000 Lean jobs and should complete without errors in ~2 minutes on a modern machine.
 
 ### Run the Fallback Simulator
 
@@ -220,6 +220,14 @@ See `docs/VerifiedExtraction.md` for comparison with HACL*, Everest, CompCert, a
 - **Pedro** — Formal verification, Lean 4 proofs, theorem design
 - **Carlos** — Physical model, circuit theory, Loewner order analysis
 - **David** — Electromagnetic simulation, experimental validation, firmware (INOVATION)
+
+---
+
+## Known Limitations
+
+1. **Exact channel gap.** Theorem `degradedness_exact` (ExactChannel.lean) requires the stronger hypothesis `S_bob ⪰ S_eve_sym` (diagonal matrix), while the main degradedness theorem only proves `S_bob ⪰ S_eve_matrix` (scalar at position 0,0). The optimal threshold for the exact channel is larger than `min_f_sq`; this tighter bound is future work. The approximate model is sufficient for the secrecy capacity proof.
+
+2. **Reference firmware is a simulation.** `build/key_generation.c` is an **educational simulation**, not production firmware. It uses `rand()` without a hardware TRNG and mixes parameters from different geometries. For production, use `build/verified_main.c` with the Lean-verified extraction pipeline.
 
 ---
 
