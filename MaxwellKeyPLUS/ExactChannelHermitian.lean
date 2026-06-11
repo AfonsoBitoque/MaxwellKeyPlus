@@ -290,6 +290,34 @@ theorem exact_channel_applies_to_physics (c : ChannelModel)
     (symm_psd_iff a₂ b₂).mpr h_psd₂
   exact ExactChannel.f_monotone_psd h_psd₁' h_psd₂' h_le
 
+/-! ## NOTA sobre a ponte ao modelo aproximado (DegradednessGeneral.lean)
+
+O teorema `exact_channel_applies_to_physics` prova monotonia para
+matrizes da forma Z0^2 * (B * B), onde B = [[b_self, b_mutual], ...].
+
+O modelo aproximado em `DegradednessGeneral.lean` define:
+  S_bob = Z0^2 * [[M_self^2 + M_mutual^2, 2*M_self*M_mutual], ...]
+
+A ponte formal e:
+  Se M_self = Z0 * |b_self|  e  M_mutual = Z0 * |b_mutual|,
+  entao S_bob = Z0^2 * (B * B) = H_bob * H_bob^dagger.
+
+Isto porque:
+  (Z0*b_self)^2 + (Z0*b_mutual)^2 = Z0^2 * (b_self^2 + b_mutual^2)
+  2 * (Z0*b_self) * (Z0*b_mutual) = Z0^2 * (2*b_self*b_mutual)
+
+No entanto, a relacao M_self = Z0 * |b_self| NAO esta formalizada
+como um lema neste modulo. E uma hipotese implicita do modelo
+simplificado. A sua verificacao depende das definicoes fisicas
+em AdmittanceMatrix.lean (Y_self, Y_mutual) e das normalizacoes
+usadas em DegradednessGeneral.lean.
+
+Em resumo: ExactChannelHermitian.lean prova que o canal exato
+aplica-se ao modelo FISICO (H_bob * H_bob^dagger), mas a
+igualdade entre este modelo fisico e S_bob do DegradednessGeneral
+rege-se pela definicao operacional dos parametros normalizados.
+-/
+
 end ExactChannelHermitian
 
 end MaxwellKey

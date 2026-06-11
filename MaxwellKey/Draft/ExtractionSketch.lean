@@ -20,7 +20,7 @@ import Mathlib.Data.Fin.VecNotation
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Complex.Basic
 import MaxwellKey.ChannelMatrix
-import MaxwellKey.NoiseModel
+import MaxwellKey.Draft.NoiseModelSketch
 -- NOTA: Extraction.lean usa os módulos generalizados (min_f_sq) como default.
 -- Os módulos legados (f >= 3) mantêm-se para retrocompatibilidade.
 import MaxwellKeyPLUS.DegradednessGeneral

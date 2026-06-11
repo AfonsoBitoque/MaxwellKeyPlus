@@ -129,6 +129,10 @@ def compute_all_params(
     M_self = Z0_term * Y_self_mag
     M_mutual = Z0_term * Y_mutual_mag
     f_att = eve_attenuation_factor(M_self, M_mutual, d_eve_ratio)
+    # Protecao numerica: o denominador (M_self^2 - M_mutual^2)^2 pode ser
+    # muito pequeno para geometrias com acoplamento muito fraco. No Lean,
+    # a hipotese |M_mutual| < |M_self| garante denominador > 0. Em Python,
+    # 1e-18 e um limiar arbitrariamente pequeno para evitar divisao por zero.
     denom = max((M_self**2 - M_mutual**2)**2, 1e-18)
     min_f_sq = ((M_self**2 + M_mutual**2) * (M_self + M_mutual)**2) / denom
     return MaxwellKeyParams(

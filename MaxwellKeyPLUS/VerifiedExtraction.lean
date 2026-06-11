@@ -1,22 +1,26 @@
 /-
   MaxwellKeyPLUS / VerifiedExtraction.lean
   ----------------------------------------
-  Extracao verificada de codigo Lean 4 para C.
+  ESPECIFICACAO de extracao de codigo Lean 4 para C.
 
   Este modulo define uma semantica formal de um subconjunto de C
-  (expressoes aritmeticas double) e prova que a traducao de
-  expressoes Lean (Float) para C preserva a semantica.
+  (expressoes aritmeticas double). NAO inclui provas de correcao
+  da traducao Lean -> C — estas provas foram removidas durante o
+  desenvolvimento porque nao compilavam com Float.
 
-  O objetivo e garantir que o codigo C gerado a partir das definicoes
-  Lean e semanticamente equivalente as provas formais. Isto fecha
-  a lacuna entre a verificacao formal (Lean) e o firmware (C).
-
-  Estrutura:
+  O que este modulo entrega:
   1. Semantica denotacional de expressoes C (CExpr)
-  2. Compilador Lean -> C (para expressoes aritmeticas)
-  3. Prova de correcao do compilador (preservacao de semantica)
-  4. Aplicacao ao MaxwellKey: prova de equivalencia das funcoes
-     de firmware com as definicoes matematicas.
+  2. Traducao MANUAL de expressoes Lean para CExpr
+  3. Axioma de preservacao de desigualdades (axioma, nao teorema)
+
+  O que este modulo NAO entrega:
+  - Prova de que a traducao Lean -> CExpr e correta
+  - Prova de equivalencia entre firmware C e definicoes Lean
+  - Semantica de C completa (ponteiros, loops, funcoes)
+
+  A extracao REAL e feita pelo compilador Lean 4 (lake build),
+  que gera codigo nativo via C IR. A correcao deste pipeline e
+  garantida pelo compilador Lean, nao por este modulo.
 
   NOTA: Este e um modelo SIMPLIFICADO de C. Inclui apenas:
   - literais double
@@ -149,56 +153,36 @@ theorem preservation_of_strict_inequality
     denote env e1 > denote env e2 :=
   h  -- trivial: a propria hipotese
 
-/- Corolario: para os parametros concretos do TwoParallelStrips,
-   a traducao C de arg_bob > arg_eve e correta.
-
-   A prova combina:
+/- NOTA: O corolario abaixo depende de provas de correcao da
+   traducao Lean -> C que NAO existem neste modulo.
+   A "prova" seria:
    1. arg_bob_c e semanticamente equivalente a definicao Lean
-      (arg_bob_c_correct)
    2. A definicao Lean satisfaz arg_bob > arg_eve
-      (SecrecyCapacityGeneral.arg_bob_gt_arg_eve)
    3. Logo a expressao C tambem satisfaz a desigualdade
-      (preservation_of_strict_inequality)
-
-   ===================================================================== -/
+   O passo 1 nao esta formalizado; e assumido como axioma. -/
 
 /-- Mapeamento de variaveis C para constantes do firmware C.
-    No firmware C, os parametros sao constantes globais:
-      M_SELF = 0.2098811678, M_MUTUAL = 0.0215134645, etc.
-
-    A equivalencia e: para um ambiente que mapeia as variaveis
-    para os valores constantes do firmware, a semantica das
-    expressoes C coincide com os calculos do firmware C. -/
+    Valores reais injetados no ambiente. -/
 def firmware_env : Env := fun _ => 0.0  -- placeholder; valores reais injetados
 
-/- Teorema de equivalencia semantica: a funcao capacity_bob do
-   key_generation.c produz o mesmo resultado que a semantica
-   da expressao C correspondente.
-
-   NOTA: A prova completa requer modelar toda a semantica de C,
-   incluindo funcoes, variaveis locais, e estruturas de controlo.
-   O que provamos aqui e a equivalencia ao nivel de expressoes
-   aritmeticas, que e o nucleo do calculo de capacidade. -/
+/- NOTA: O "teorema de equivalencia semantica" mencionado em
+   versoes anteriores deste ficheiro NAO existe. O que temos
+   e uma especificacao de semantica, nao uma prova de correcao.
+   A extracao real e feita pelo compilador Lean 4 (lake build). -/
 
 /- =====================================================================
-   7. EXTRACAO AUTOMATICA (Lean 4 -> C)
+   7. EXTRACAO AUTOMATICA (Lean 4 -> C) — FORA DE SCOPE DESTE MODULO
    ===================================================================== -/
 
-/- O Lean 4 compila funcoes para codigo nativo via uma
-   representacao intermedia em C. O processo e:
+/- O Lean 4 compila funcoes para codigo nativo via C IR.
+   O processo e: Lean (Float) -> Lean IR -> C -> Assembly -> Binario.
 
-   Lean (Float) -> Lean IR -> C -> Assembly -> Binario
+   A correcao deste pipeline e garantida pelo compilador Lean,
+   nao por este modulo. As funcoes em VerifiedFirmware.lean sao
+   puras (sem IO, sem estado), logo a compilacao preserva
+   semanticamente o comportamento.
 
-   A correcao deste pipeline e garantida pelo compilador do Lean,
-   que e verificado para preservar a semantica das funcoes
-   puras (sem efeitos colaterais).
-
-   Para o MaxwellKey, as funcoes em VerifiedFirmware.lean sao
-   funcoes puras (sem IO, sem estado, sem efeitos colaterais).
-   Logo, a compilacao Lean -> C preserva semanticamente o
-   comportamento das funcoes.
-
-   O ficheiro build/Makefile automatiza este pipeline.
+   Para instrucoes de build, ver build/Makefile.
 -/
 
 end VerifiedExtraction

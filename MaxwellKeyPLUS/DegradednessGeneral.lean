@@ -1,4 +1,11 @@
-/- Condição ótima para degradedness: f² ≥ min_f_sq(M_self, M_mutual). -/
+/- Condição ótima para degradedness: f² ≥ min_f_sq(M_self, M_mutual).
+
+  AVISO DE NOMENCLATURA:
+  Neste modulo, M_self e M_mutual sao PARAMETROS NORMALIZADOS
+  (adimensionais, Z0 * |Y|). NAO sao as indutancias fisicas (Henry).
+  Ver AdmittanceMatrix.lean para o modelo fisico completo com
+  C_self, L_self, C_mutual, M_mutual (Henry).
+-/
 
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Real.Basic
@@ -19,8 +26,9 @@ lemma min_f_sq_denom_pos {M_self M_mutual : ℝ} (h : |M_mutual| < |M_self|) :
   have h1 : M_self^2 > M_mutual^2 := by apply sq_lt_sq.mpr; exact h
   nlinarith [h1]
 
-/-- min_f_sq > 1 sob acoplamento fraco (resultado auxiliar).
-    Nao e usado atualmente nas provas principais, mas pode ser util
+/-- min_f_sq > 1 sob acoplamento fraco (LEMA AUXILIAR — NAO USADO).
+    Nao e usado atualmente nas provas principais.
+    Mantido como resultado matematico independente; pode ser util
     para futuras extensoes (ex: limites inferiores para capacidade). -/
 lemma min_f_sq_gt_one {M_self M_mutual : ℝ} (h : |M_mutual| < |M_self|)
     (h_same_sign : M_self * M_mutual > 0) :
@@ -128,12 +136,14 @@ lemma weak_coupling_implies_lt_self (M_self M_mutual : ℝ)
 
 structure DegradednessParamsGeneral where
   /-- Parametro de acoplamento proprio normalizado (adimensional).
-      Relacionado com a indutancia fisica via M_self = Z0 * |Y_self|,
-      onde Y_self e a admitancia propria do circuito. -/
+      Relacionado com a indutancia fisica via M_self = Z0 * |b_self|,
+      onde b_self e a susceptancia propria (|Y_self|/omega).
+      Ver AdmittanceMatrix.lean para o modelo fisico completo.
+      Ver ExactChannelHermitian.lean para a ponte ao canal exato. -/
   M_self : ℝ
   /-- Parametro de acoplamento mutuo normalizado (adimensional).
       NOTA: NAO e a indutancia mutua fisica (que tem unidade Henry).
-      E o parametro Z0 * |Y_mutual|, onde Y_mutual e a admitancia mutua.
+      E o parametro Z0 * |b_mutual|, onde b_mutual e a susceptancia mutua.
       Ver AdmittanceMatrix.lean para o modelo fisico completo. -/
   M_mutual : ℝ
   Z₀ : ℝ

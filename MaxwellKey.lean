@@ -2,7 +2,6 @@
 -- Import modules here that should be built as part of the library.
 import MaxwellKey.AdmittanceMatrix
 import MaxwellKey.ChannelMatrix
-import MaxwellKey.NoiseModel
 import MaxwellKey.Degradedness
 import MaxwellKey.SecrecyCapacity
 import MaxwellKey.Examples.TwoParallelStrips

@@ -1,7 +1,11 @@
 /-
-  MaxwellKey / NoiseModel.lean
-  ---------------------------------
-  Modelo de ruído térmico gaussiano para o canal de comunicação.
+  MaxwellKey / Draft / NoiseModelSketch.lean
+  -------------------------------------------
+  ESBOCO: Modelo de ruído térmico gaussiano (não integrado) para o canal de comunicação.
+
+  STATUS: Este ficheiro e um esboco. Nao faz parte da biblioteca principal.
+  A estrutura NoiseModel nunca foi integrada nos teoremas principais.
+  Os exemplos usam N0_val hard-coded em vez de NoiseModel.N0.
 
   O ruído térmico é modelado como branco e descorrelacionado em cada porta,
   com densidade espectral N₀ = k_B · T · B.

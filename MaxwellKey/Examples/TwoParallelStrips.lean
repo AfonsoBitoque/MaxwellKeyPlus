@@ -32,7 +32,6 @@ import Mathlib.Analysis.SpecialFunctions.Log.Base
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Linarith
 import MaxwellKey.SecrecyCapacity
-import MaxwellKey.NoiseModel
 import MaxwellKeyPLUS.DegradednessGeneral
 import MaxwellKeyPLUS.SecrecyCapacityGeneral
 
